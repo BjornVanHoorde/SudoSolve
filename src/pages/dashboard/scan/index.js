@@ -3,23 +3,23 @@
 
 // IMPORTS
 // ------------------------------------------------------------------------------------------------
-import { PATH_AUTH } from "src/routes/paths";
-import { useRouter } from "next/router";
+import Head from "next/head";
+import { Container, Typography } from "@mui/material";
+import DashboardLayout from "src/layouts/dashboard/DashboardLayout";
+import { useSettingsContext } from "src/components/settings";
 import { useAuthContext } from "src/auth/useAuthContext";
-import { useEffect } from "react";
-import LoadingScreen from "src/components/loading-screen/LoadingScreen";
-import { PATH_AFTER_LOGIN } from "src/config-global";
 
 // GLOBALS
 // ------------------------------------------------------------------------------------------------
 
 // EXPORT
 // ------------------------------------------------------------------------------------------------
-export default function HomePage() {
+ScanIndexScreen.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+export default function ScanIndexScreen() {
   // DATA & METHODS
   // ------------------------------------------------------------------------------------------------
-  const { push } = useRouter();
-  const { user, isAuthenticated, isInitialized } = useAuthContext();
+  const { user } = useAuthContext();
+  const { themeStretch } = useSettingsContext();
 
   // STATES
   // ------------------------------------------------------------------------------------------------
@@ -32,17 +32,18 @@ export default function HomePage() {
 
   // EFFECTS
   // ------------------------------------------------------------------------------------------------
-  useEffect(() => {
-    if (isInitialized) {
-      if (isAuthenticated) {
-        push(PATH_AFTER_LOGIN);
-      } else {
-        push(PATH_AUTH.login);
-      }
-    }
-  }, [user, isInitialized]);
 
   // COMPONENT
   // ------------------------------------------------------------------------------------------------
-  return <LoadingScreen />;
+  return (
+    <>
+      <Head>
+        <title>SudoSolve | Scan</title>
+      </Head>
+
+      <Container maxWidth={themeStretch ? false : "xl"}>
+        <Typography variant="h2">Scan page</Typography>
+      </Container>
+    </>
+  );
 }

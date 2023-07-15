@@ -1,11 +1,16 @@
 // --- INFO -------
 // De provider voor het inloggen en de user op te halen van Firebase
 
-
 // --- IMPORTS ----
-import PropTypes from 'prop-types';
-import { createContext, useEffect, useReducer, useCallback, useMemo } from 'react';
-import { initializeApp } from 'firebase/app';
+import PropTypes from "prop-types";
+import {
+  createContext,
+  useEffect,
+  useReducer,
+  useCallback,
+  useMemo,
+} from "react";
+import { initializeApp } from "firebase/app";
 import {
   getAuth,
   signOut,
@@ -16,10 +21,16 @@ import {
   TwitterAuthProvider,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-} from 'firebase/auth';
-import { getFirestore, collection, doc, getDoc, setDoc } from 'firebase/firestore';
-import { FIREBASE_API } from '../config-global';
-
+} from "firebase/auth";
+import {
+  getFirestore,
+  collection,
+  doc,
+  getDoc,
+  setDoc,
+} from "firebase/firestore";
+import { FIREBASE_API } from "../config-global";
+import { initialStateUser } from "src/firebase/apis/users";
 
 const initialState = {
   isInitialized: false,
@@ -28,7 +39,7 @@ const initialState = {
 };
 
 const reducer = (state, action) => {
-  if (action.type === 'INITIAL') {
+  if (action.type === "INITIAL") {
     return {
       isInitialized: true,
       isAuthenticated: action.payload.isAuthenticated,
@@ -63,24 +74,24 @@ export function AuthProvider({ children }) {
     try {
       onAuthStateChanged(AUTH, async (user) => {
         if (user) {
-          const userRef = doc(DB, 'users', user.uid);
+          const userRef = doc(DB, "users", user.uid);
           const docSnap = await getDoc(userRef);
           const profile = docSnap.data();
 
           dispatch({
-            type: 'INITIAL',
+            type: "INITIAL",
             payload: {
               isAuthenticated: true,
               user: {
                 ...user,
                 ...profile,
-                role: 'admin',
+                role: "admin",
               },
             },
           });
         } else {
           dispatch({
-            type: 'INITIAL',
+            type: "INITIAL",
             payload: {
               isAuthenticated: false,
               user: null,
@@ -115,16 +126,19 @@ export function AuthProvider({ children }) {
   }, []);
 
   // REGISTER
-  const register = useCallback(async (email, password, firstName, lastName) => {
-    await createUserWithEmailAndPassword(AUTH, email, password).then(async (res) => {
-      const userRef = doc(collection(DB, 'users'), res.user?.uid);
+  const register = useCallback(async (email, password, username) => {
+    await createUserWithEmailAndPassword(AUTH, email, password).then(
+      async (res) => {
+        const userRef = doc(collection(DB, "users"), res.user?.uid);
 
-      await setDoc(userRef, {
-        uid: res.user?.uid,
-        email,
-        displayName: `${firstName} ${lastName}`,
-      });
-    });
+        await setDoc(userRef, {
+          ...initialStateUser,
+          userId: res.user?.uid,
+          email,
+          username,
+        });
+      }
+    );
   }, []);
 
   // LOGOUT
@@ -137,7 +151,7 @@ export function AuthProvider({ children }) {
       isInitialized: state.isInitialized,
       isAuthenticated: state.isAuthenticated,
       user: state.user,
-      method: 'firebase',
+      method: "firebase",
       login,
       loginWithGoogle,
       loginWithGithub,
@@ -158,5 +172,9 @@ export function AuthProvider({ children }) {
     ]
   );
 
-  return <AuthContext.Provider value={memoizedValue}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={memoizedValue}>
+      {children}
+    </AuthContext.Provider>
+  );
 }

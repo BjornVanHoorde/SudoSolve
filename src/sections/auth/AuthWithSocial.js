@@ -1,21 +1,22 @@
 // @mui
-import { Divider, IconButton, Stack } from '@mui/material';
+import { Divider, IconButton, Stack } from "@mui/material";
 // auth
-import { useAuthContext } from '../../auth/useAuthContext';
+import { useAuthContext } from "../../auth/useAuthContext";
 // components
-import Iconify from '../../components/iconify';
+import Iconify from "../../components/iconify";
 
 // ----------------------------------------------------------------------
 
 export default function AuthWithSocial() {
-  const { loginWithGoogle, loginWithGithub, loginWithTwitter } = useAuthContext();
+  const { loginWithGoogle, loginWithGithub, loginWithTwitter } =
+    useAuthContext();
 
   const handleGoogleLogin = async () => {
     try {
       if (loginWithGoogle) {
         loginWithGoogle();
       }
-      console.log('GOOGLE LOGIN');
+      console.log("GOOGLE LOGIN");
     } catch (error) {
       console.error(error);
     }
@@ -26,7 +27,7 @@ export default function AuthWithSocial() {
       if (loginWithGithub) {
         loginWithGithub();
       }
-      console.log('GITHUB LOGIN');
+      console.log("GITHUB LOGIN");
     } catch (error) {
       console.error(error);
     }
@@ -37,7 +38,7 @@ export default function AuthWithSocial() {
       if (loginWithTwitter) {
         loginWithTwitter();
       }
-      console.log('TWITTER LOGIN');
+      console.log("TWITTER LOGIN");
     } catch (error) {
       console.error(error);
     }
@@ -48,10 +49,10 @@ export default function AuthWithSocial() {
       <Divider
         sx={{
           my: 2.5,
-          typography: 'overline',
-          color: 'text.disabled',
-          '&::before, ::after': {
-            borderTopStyle: 'dashed',
+          typography: "overline",
+          color: "text.disabled",
+          "&::before, ::after": {
+            borderTopStyle: "dashed",
           },
         }}
       >
@@ -65,10 +66,6 @@ export default function AuthWithSocial() {
 
         <IconButton color="inherit" onClick={handleGithubLogin}>
           <Iconify icon="eva:github-fill" />
-        </IconButton>
-
-        <IconButton onClick={handleTwitterLogin}>
-          <Iconify icon="eva:twitter-fill" color="#1C9CEA" />
         </IconButton>
       </Stack>
     </div>

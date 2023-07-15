@@ -1,12 +1,12 @@
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 // @mui
-import { Box } from '@mui/material';
+import { Box } from "@mui/material";
 // hooks
-import useResponsive from '../../hooks/useResponsive';
+import useResponsive from "../../hooks/useResponsive";
 // config
-import { HEADER, NAV } from '../../config-global';
+import { HEADER, NAV } from "../../config-global";
 // components
-import { useSettingsContext } from '../../components/settings';
+import { useSettingsContext } from "../../components/settings";
 
 // ----------------------------------------------------------------------
 
@@ -20,11 +20,11 @@ Main.propTypes = {
 export default function Main({ children, sx, ...other }) {
   const { themeLayout } = useSettingsContext();
 
-  const isNavHorizontal = themeLayout === 'horizontal';
+  const isNavHorizontal = themeLayout === "horizontal";
 
-  const isNavMini = themeLayout === 'mini';
+  const isNavMini = themeLayout === "mini";
 
-  const isDesktop = useResponsive('up', 'lg');
+  const isDesktop = useResponsive("up", "lg");
 
   if (isNavHorizontal) {
     return (
@@ -50,10 +50,11 @@ export default function Main({ children, sx, ...other }) {
       component="main"
       sx={{
         flexGrow: 1,
+
         py: `${HEADER.H_MOBILE + SPACING}px`,
         ...(isDesktop && {
           px: 2,
-          py: `${HEADER.H_DASHBOARD_DESKTOP + SPACING}px`,
+          py: `80px`,
           width: `calc(100% - ${NAV.W_DASHBOARD}px)`,
           ...(isNavMini && {
             width: `calc(100% - ${NAV.W_DASHBOARD_MINI}px)`,

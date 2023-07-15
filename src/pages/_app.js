@@ -1,51 +1,52 @@
 // i18n
-import '../locales/i18n';
+import "../locales/i18n";
 
 // scroll bar
-import 'simplebar-react/dist/simplebar.min.css';
+import "simplebar-react/dist/simplebar.min.css";
 
 // lightbox
 /* eslint-disable import/no-unresolved */
-import 'yet-another-react-lightbox/styles.css';
-import 'yet-another-react-lightbox/plugins/captions.css';
-import 'yet-another-react-lightbox/plugins/thumbnails.css';
+import "yet-another-react-lightbox/styles.css";
+import "yet-another-react-lightbox/plugins/captions.css";
+import "yet-another-react-lightbox/plugins/thumbnails.css";
 
 // map
-import 'mapbox-gl/dist/mapbox-gl.css';
+import "mapbox-gl/dist/mapbox-gl.css";
 
 // editor
-import 'react-quill/dist/quill.snow.css';
+import "react-quill/dist/quill.snow.css";
 
 // slick-carousel
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 // lazy image
-import 'react-lazy-load-image-component/src/effects/blur.css';
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 // ----------------------------------------------------------------------
 
-import PropTypes from 'prop-types';
-import { CacheProvider } from '@emotion/react';
+import PropTypes from "prop-types";
+import { CacheProvider } from "@emotion/react";
 // next
-import Head from 'next/head';
+import Head from "next/head";
 // @mui
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 // utils
-import createEmotionCache from '../utils/createEmotionCache';
+import createEmotionCache from "../utils/createEmotionCache";
 // theme
-import ThemeProvider from '../theme';
+import ThemeProvider from "../theme";
 // locales
-import ThemeLocalization from '../locales';
-import { StyledChart } from '../components/chart';
-import ProgressBar from '../components/progress-bar';
-import SnackbarProvider from '../components/snackbar';
-import { MotionLazyContainer } from '../components/animate';
-import { ThemeSettings, SettingsProvider } from '../components/settings';
-import { AuthProvider } from '../auth/FirebaseContext';
+import ThemeLocalization from "../locales";
+import { StyledChart } from "../components/chart";
+import ProgressBar from "../components/progress-bar";
+import SnackbarProvider from "../components/snackbar";
+import { MotionLazyContainer } from "../components/animate";
+import { ThemeSettings, SettingsProvider } from "../components/settings";
+import { AuthProvider } from "../auth/FirebaseContext";
 
-import { DataProvider } from 'src/firebase/dataProvider';
+import { DataProvider } from "src/firebase/dataProvider";
+import { IsMobileProvider } from "src/utils/isMobileProvider";
 
 // ----------------------------------------------------------------------
 
@@ -79,7 +80,11 @@ export default function MyApp(props) {
                       <SnackbarProvider>
                         <StyledChart />
                         <ProgressBar />
-                        {getLayout(<Component {...pageProps} />)}
+                        {getLayout(
+                          <IsMobileProvider>
+                            <Component {...pageProps} />
+                          </IsMobileProvider>
+                        )}
                       </SnackbarProvider>
                     </ThemeLocalization>
                   </ThemeSettings>

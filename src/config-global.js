@@ -1,10 +1,10 @@
 // routes
-import { PATH_DASHBOARD } from './routes/paths';
+import { PATH_DASHBOARD } from "./routes/paths";
 
 // API
 // ----------------------------------------------------------------------
 
-export const HOST_API_KEY = process.env.HOST_API_KEY || '';
+export const HOST_API_KEY = process.env.HOST_API_KEY || "";
 
 export const FIREBASE_API = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -29,7 +29,7 @@ export const AUTH0_API = {
 export const MAP_API = process.env.MAPBOX_API;
 
 // ROOT PATH AFTER LOGIN SUCCESSFUL
-export const PATH_AFTER_LOGIN = PATH_DASHBOARD.general.app; // as '/dashboard/app'
+export const PATH_AFTER_LOGIN = PATH_DASHBOARD.home; // as '/dashboard/app'
 
 // LAYOUT
 // ----------------------------------------------------------------------
