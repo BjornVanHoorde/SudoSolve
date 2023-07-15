@@ -27,6 +27,7 @@ export const PATH_DASHBOARD = {
   home: path(ROOTS_DASHBOARD, "/home"),
   play: {
     root: path(ROOTS_DASHBOARD, "/play"),
+    difficulty: (difficulty) => path(ROOTS_DASHBOARD, `/play/${difficulty}`),
   },
   scan: {
     root: path(ROOTS_DASHBOARD, "/scan"),

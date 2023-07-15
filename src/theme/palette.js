@@ -41,7 +41,7 @@ export const SECONDARY = {
   main: "#C28F24",
   dark: "#7E611B",
   darker: "#4B3D12",
-  contrastText: "#FFFFFF",
+  contrastText: "#141414",
 };
 
 // const SECONDARY = {
@@ -62,7 +62,7 @@ const INFO = {
   contrastText: "#FFFFFF",
 };
 
-const SUCCESS = {
+export const SUCCESS = {
   lighter: "#D8FBDE",
   light: "#86E8AB",
   main: "#36B37E",

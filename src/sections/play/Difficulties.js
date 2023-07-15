@@ -4,8 +4,10 @@
 // IMPORTS
 // ------------------------------------------------------------------------------------------------
 import { Card, Stack, Typography } from "@mui/material";
+import { useRouter } from "next/router";
 import { useContext, useState } from "react";
 import SvgColor from "src/components/svg-color/SvgColor";
+import { PATH_DASHBOARD } from "src/routes/paths";
 import { difficulties } from "src/utils/constants";
 import { isMobileContext } from "src/utils/isMobileProvider";
 
@@ -18,6 +20,7 @@ export default function Difficulties() {
   // DATA & METHODS
   // ------------------------------------------------------------------------------------------------
   const { isMobile } = useContext(isMobileContext);
+  const { push } = useRouter();
 
   // STATES
   // ------------------------------------------------------------------------------------------------
@@ -28,6 +31,9 @@ export default function Difficulties() {
 
   // FUNCTIONS
   // ------------------------------------------------------------------------------------------------
+  const handleClick = (difficulty) => {
+    push(PATH_DASHBOARD.play.difficulty(difficulty.name.toLowerCase()));
+  };
 
   // EFFECTS
   // ------------------------------------------------------------------------------------------------
@@ -56,6 +62,7 @@ export default function Difficulties() {
           }}
           onMouseEnter={() => setHoveredDifficulty(difficulty)}
           onMouseLeave={() => setHoveredDifficulty(null)}
+          onClick={() => handleClick(difficulty)}
         >
           <Stack
             direction="row"

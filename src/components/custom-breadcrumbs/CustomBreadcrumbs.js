@@ -19,6 +19,7 @@ export default function CustomBreadcrumbs({
   links,
   action,
   heading,
+  icon,
   moreLink,
   activeLast,
   sx,
@@ -31,11 +32,14 @@ export default function CustomBreadcrumbs({
       <Stack direction="row" alignItems="center">
         <Box sx={{ flexGrow: 1 }}>
           {/* HEADING */}
-          {heading && (
-            <Typography variant="h4" gutterBottom>
-              {heading}
-            </Typography>
-          )}
+          <Stack direction="row" alignItems="center" spacing={1}>
+            {icon && icon}
+            {heading && (
+              <Typography variant="h4" gutterBottom>
+                {heading}
+              </Typography>
+            )}
+          </Stack>
 
           {/* BREADCRUMBS */}
           {!!links.length && (
