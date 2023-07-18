@@ -3,23 +3,21 @@
 
 // IMPORTS
 // ------------------------------------------------------------------------------------------------
+import { Button, Card, Container, Dialog, Grid, Slide } from "@mui/material";
 import Head from "next/head";
-import { Card, Container, Dialog, Grid, Slide } from "@mui/material";
-import DashboardLayout from "src/layouts/dashboard/DashboardLayout";
-import { useSettingsContext } from "src/components/settings";
+import { forwardRef, useContext, useEffect, useState } from "react";
 import { useAuthContext } from "src/auth/useAuthContext";
 import CustomBreadcrumbs from "src/components/custom-breadcrumbs/CustomBreadcrumbs";
-import { PATH_DASHBOARD } from "src/routes/paths";
-import { forwardRef, useContext, useEffect, useState } from "react";
-import { isMobileContext } from "src/utils/isMobileProvider";
-import { useRouter } from "next/router";
-import { difficulties } from "src/utils/constants";
-import SvgColor from "src/components/svg-color/SvgColor";
-import LevelGrid from "src/sections/play/LevelGrid";
-import { fb_create_sudoku } from "src/firebase/apis/sudokus";
-import { testSudoku } from "src/utils/testSudoku";
+import { useSettingsContext } from "src/components/settings";
+import { fb_create_userSudoku } from "src/firebase/apis/userSudokus";
 import { dataContext } from "src/firebase/dataProvider";
+import DashboardLayout from "src/layouts/dashboard/DashboardLayout";
+import { PATH_DASHBOARD } from "src/routes/paths";
 import LevelCard from "src/sections/play/LevelCard";
+import LevelGrid from "src/sections/play/LevelGrid";
+import { isMobileContext } from "src/utils/isMobileProvider";
+import { testSudoku } from "src/utils/testSudoku";
+import { date } from "yup";
 
 // GLOBALS
 // ------------------------------------------------------------------------------------------------
@@ -29,45 +27,34 @@ const Transition = forwardRef(function Transition(props, ref) {
 
 // EXPORT
 // ------------------------------------------------------------------------------------------------
-DifficultyScreen.getLayout = (page) => (
+PlayMySudokusScreen.getLayout = (page) => (
   <DashboardLayout>{page}</DashboardLayout>
 );
-export default function DifficultyScreen() {
+export default function PlayMySudokusScreen() {
   // DATA & METHODS
   // ------------------------------------------------------------------------------------------------
   const { user } = useAuthContext();
   const { themeStretch } = useSettingsContext();
   const { isMobile } = useContext(isMobileContext);
-  const { difficulty } = useRouter().query;
-  const { sudokus, savedSudokus } = useContext(dataContext);
+  const { userSudokus, savedSudokus } = useContext(dataContext);
 
   // STATES
   // ------------------------------------------------------------------------------------------------
-  const [difficultyLevels, setDifficultyLevels] = useState([]);
-  const [savedDifficultyLevels, setSavedDifficultyLevels] = useState([]);
   const [selectedLevel, setSelectedLevel] = useState(null);
   const [selectedSavedLevel, setSelectedSavedLevel] = useState(null);
   const [open, setOpen] = useState(false);
+  const [sorterdSudokus, setSorterdSudokus] = useState([]);
 
   // VARIABLES
   // ------------------------------------------------------------------------------------------------
 
   // FUNCTIONS
   // ------------------------------------------------------------------------------------------------
-  const handleSeed = () => {
-    fb_create_sudoku({
-      ...testSudoku,
-      difficulty: difficulty,
-    });
-  };
-
   const handleLevelClick = (level) => {
     setSelectedLevel(level);
 
     setSelectedSavedLevel(
-      savedDifficultyLevels.find(
-        (sudoku) => sudoku.sudokuId === level.level.sudokuId
-      )
+      savedSudokus.find((sudoku) => sudoku.sudokuId === level.level.sudokuId)
     );
 
     setOpen(true);
@@ -79,68 +66,59 @@ export default function DifficultyScreen() {
     setOpen(false);
   };
 
+  const handleSeed = () => {
+    fb_create_userSudoku({
+      ...testSudoku,
+      type: "generated",
+    });
+  };
+
   // EFFECTS
   // ------------------------------------------------------------------------------------------------
   useEffect(() => {
-    if (sudokus) {
-      setDifficultyLevels(
-        sudokus.filter((sudoku) => sudoku.difficulty === difficulty)
-      );
-    }
-  }, [sudokus]);
-
-  useEffect(() => {
-    if (savedSudokus) {
-      setSavedDifficultyLevels(
-        savedSudokus.filter((sudoku) => sudoku.difficulty === difficulty) || []
-      );
-    }
-  }, [savedSudokus]);
+    // order the userSudokus by date
+    if (!userSudokus) return;
+    setSorterdSudokus(
+      userSudokus.sort((a, b) => {
+        return new Date(b.dateCreated) - new Date(a.dateCreated);
+      })
+    );
+  }, [userSudokus]);
 
   // COMPONENT
   // ------------------------------------------------------------------------------------------------
   return (
     <>
       <Head>
-        <title>{`SudoSolve | ${
-          difficulty ? difficulties[difficulty].name : ""
-        }`}</title>
+        <title>SudoSolve | My Sudokus</title>
       </Head>
 
       <Container maxWidth={themeStretch ? false : "xl"}>
         <CustomBreadcrumbs
-          icon={
-            <SvgColor
-              src={difficulty ? difficulties[difficulty].icon : ""}
-              alt={difficulty ? difficulties[difficulty].name : ""}
-              color={difficulty ? difficulties[difficulty].color : ""}
-            />
-          }
-          heading={difficulty ? difficulties[difficulty].name : ""}
+          heading="My Sudokus"
           links={[
             { name: "Levels", href: PATH_DASHBOARD.play.root },
-            { name: difficulty ? difficulties[difficulty].name : "" },
+            { name: "My Sudokus" },
           ]}
         />
-        {/* 
-        <Button variant="contained" onClick={handleSeed}>
+
+        {/* <Button variant="contained" onClick={handleSeed}>
           Seed
         </Button> */}
+
         <Grid container spacing={2}>
-          {difficultyLevels && difficultyLevels.length > 0 && (
+          {sorterdSudokus && sorterdSudokus.length > 0 && (
             <Grid item xs={12} md={8}>
               {isMobile ? (
                 <LevelGrid
-                  levels={difficultyLevels}
-                  difficulty={difficulties[difficulty]}
+                  levels={sorterdSudokus}
                   onClick={handleLevelClick}
                   selectedLevel={selectedLevel}
                 />
               ) : (
                 <Card sx={{ p: 2 }}>
                   <LevelGrid
-                    levels={difficultyLevels}
-                    difficulty={difficulties[difficulty]}
+                    levels={sorterdSudokus}
                     onClick={handleLevelClick}
                     selectedLevel={selectedLevel}
                   />
@@ -153,6 +131,7 @@ export default function DifficultyScreen() {
               onLevelClose={handleLevelClose}
               selectedLevel={selectedLevel}
               selectedSavedLevel={selectedSavedLevel}
+              isUserSudoku={true}
             />
           )}
           {selectedLevel && isMobile && (
@@ -165,6 +144,7 @@ export default function DifficultyScreen() {
                 onLevelClose={handleLevelClose}
                 selectedLevel={selectedLevel}
                 selectedSavedLevel={selectedSavedLevel}
+                isUserSudoku={true}
               />
             </Dialog>
           )}

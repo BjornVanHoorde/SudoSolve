@@ -14,6 +14,7 @@ import { SECONDARY } from "src/theme/palette";
 import { PATH_DASHBOARD } from "src/routes/paths";
 import { useContext } from "react";
 import { isMobileContext } from "src/utils/isMobileProvider";
+import { useRouter } from "next/router";
 
 // GLOBALS
 // ------------------------------------------------------------------------------------------------
@@ -27,6 +28,7 @@ export default function PlayIndexScreen() {
   const { user } = useAuthContext();
   const { themeStretch } = useSettingsContext();
   const { isMobile } = useContext(isMobileContext);
+  const { push } = useRouter();
 
   // STATES
   // ------------------------------------------------------------------------------------------------
@@ -70,7 +72,7 @@ export default function PlayIndexScreen() {
                 backgroundImage: `linear-gradient(to left, ${SECONDARY.main}, ${SECONDARY.lighter})`,
               }}
               onClick={() => {
-                push(PATH_DASHBOARD.scan.root);
+                push(PATH_DASHBOARD.play.mySudokus);
               }}
             >
               <Stack direction="row" spacing={2} justifyContent="space-between">
@@ -113,7 +115,7 @@ export default function PlayIndexScreen() {
                 backgroundImage: `linear-gradient(to left, ${SECONDARY.main}, ${SECONDARY.lighter})`,
               }}
               onClick={() => {
-                push(PATH_DASHBOARD.scan.root);
+                push(PATH_DASHBOARD.play.generate);
               }}
             >
               <Stack direction="row" spacing={2} justifyContent="space-between">

@@ -13,20 +13,16 @@ import { FIREBASE_API } from "../../config-global";
 const app = initializeApp(FIREBASE_API);
 const firestore = getFirestore(app);
 
-export const initialStateSavedSudoku = {
+export const initialStateUserSudoku = {
   sudokuId: "",
-  userId: "",
   title: "",
-  difficulty: "",
-  originalSudokuId: "",
-  isSolved: false,
-  time: 0,
+  type: "",
   board: [],
 };
 
 // --- SNAPSHOT --------------------------------
-export const snapshot_savedSudokus = (state) => {
-  return onSnapshot(collection(firestore, "savedSudokus"), (result) => {
+export const snapshot_userSudokus = (state) => {
+  return onSnapshot(collection(firestore, "userSudokus"), (result) => {
     try {
       if (result.docs.length != 0) {
         state(result.docs.map((doc) => doc.data()));
@@ -35,7 +31,7 @@ export const snapshot_savedSudokus = (state) => {
       }
     } catch (error) {
       console.log(
-        "[apis] (savedSudokus - snapshot_savedSudokus) cannot get savedSudokus of snapshot: ",
+        "[apis] (userSudokus - snapshot_userSudokus) cannot get userSudokus of snapshot: ",
         error
       );
       state([]);
@@ -44,27 +40,27 @@ export const snapshot_savedSudokus = (state) => {
 };
 
 // --- ACTIONS ---------------------------------
-export const fb_update_savedSudoku = (id, data) => {
+export const fb_update_userSudoku = (id, data) => {
   try {
-    return updateDoc(doc(firestore, "savedSudokus", id), {
+    return updateDoc(doc(firestore, "userSudokus", id), {
       ...data,
       dateEdited: new Date(),
     });
   } catch (error) {
     console.error(
-      "[APIS - savedSudokus] ( update_savedSudoku ) - Failed to update savedSudoku => ",
+      "[APIS - userSudokus] ( update_userSudoku ) - Failed to update userSudoku => ",
       error
     );
   }
 };
-export const fb_create_savedSudoku = (data) => {
+export const fb_create_userSudoku = (data) => {
   try {
-    return addDoc(collection(firestore, "savedSudokus"), {
+    return addDoc(collection(firestore, "userSudokus"), {
       ...data,
       dateCreated: new Date(),
     })
       .then((r) => {
-        return fb_update_savedSudoku(r.id, {
+        return fb_update_userSudoku(r.id, {
           sudokuId: r.id,
         });
       })
@@ -73,18 +69,18 @@ export const fb_create_savedSudoku = (data) => {
       });
   } catch (error) {
     console.error(
-      "[APIS - savedSudokus] ( create_savedSudoku ) - Failed to create savedSudoku => ",
+      "[APIS - userSudokus] ( create_userSudoku ) - Failed to create userSudoku => ",
       error
     );
   }
 };
 
-export const fb_delete_savedSudoku = (id) => {
+export const fb_delete_userSudoku = (id) => {
   try {
-    return deleteDoc(doc(firestore, "savedSudokus", id));
+    return deleteDoc(doc(firestore, "userSudokus", id));
   } catch (error) {
     console.error(
-      "[APIS - savedSudokus] ( delete_savedSudoku ) - Failed to delete savedSudoku => ",
+      "[APIS - userSudokus] ( delete_userSudoku ) - Failed to delete userSudoku => ",
       error
     );
   }

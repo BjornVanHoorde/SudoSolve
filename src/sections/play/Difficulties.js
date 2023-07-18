@@ -16,7 +16,7 @@ import { isMobileContext } from "src/utils/isMobileProvider";
 
 // EXPORT
 // ------------------------------------------------------------------------------------------------
-export default function Difficulties() {
+export default function Difficulties({ onClick, selectedDifficulty }) {
   // DATA & METHODS
   // ------------------------------------------------------------------------------------------------
   const { isMobile } = useContext(isMobileContext);
@@ -32,7 +32,11 @@ export default function Difficulties() {
   // FUNCTIONS
   // ------------------------------------------------------------------------------------------------
   const handleClick = (difficulty) => {
-    push(PATH_DASHBOARD.play.difficulty(difficulty.name.toLowerCase()));
+    if (onClick) {
+      onClick(difficulty);
+    } else {
+      push(PATH_DASHBOARD.play.difficulty(difficulty.name.toLowerCase()));
+    }
   };
 
   // EFFECTS
@@ -51,6 +55,10 @@ export default function Difficulties() {
           key={index}
           sx={{
             p: 2,
+            color:
+              selectedDifficulty === difficulty ? difficulty.textColor : "",
+            backgroundColor:
+              selectedDifficulty === difficulty ? difficulty.color : "",
             "&:hover": {
               cursor: "pointer",
               backgroundColor: difficulty.color,
@@ -73,7 +81,8 @@ export default function Difficulties() {
             <SvgColor
               src={difficulty.icon}
               color={
-                hoveredDifficulty === difficulty
+                hoveredDifficulty === difficulty ||
+                selectedDifficulty === difficulty
                   ? difficulty.textColor
                   : "#000000"
               }
