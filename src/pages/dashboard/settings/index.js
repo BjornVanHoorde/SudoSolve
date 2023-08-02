@@ -80,7 +80,7 @@ export default function SettingsIndexScreen() {
 
         {snapshotUser && (
           <Grid container spacing={3}>
-            <Grid item xs={8}>
+            <Grid item xs={12} md={8}>
               <Card sx={{ p: 3 }}>
                 <Typography variant="h6">Gameplay</Typography>
                 <Stack spacing={3} sx={{ mt: 2 }}>
@@ -156,7 +156,7 @@ export default function SettingsIndexScreen() {
                 </Stack>
               </Card>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={12} md={4}>
               <Card sx={{ p: 3 }}>
                 <Typography variant="h6">Themes</Typography>
                 <ColorPresetsOptions />

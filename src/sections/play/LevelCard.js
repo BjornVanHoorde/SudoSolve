@@ -18,6 +18,8 @@ import { useSnackbar } from "src/components/snackbar";
 import { useState } from "react";
 import ConfirmDialog from "src/components/confirm-dialog/ConfirmDialog";
 import { fb_delete_savedSudoku } from "src/firebase/apis/savedSudokus";
+import { useRouter } from "next/router";
+import { PATH_DASHBOARD } from "src/routes/paths";
 
 // IMPORTS
 // ------------------------------------------------------------------------------------------------
@@ -36,6 +38,7 @@ export default function LevelCard({
   // DATA & METHODS
   // ------------------------------------------------------------------------------------------------
   const { enqueueSnackbar } = useSnackbar();
+  const { push } = useRouter();
 
   // STATES
   // ------------------------------------------------------------------------------------------------
@@ -59,6 +62,12 @@ export default function LevelCard({
         console.log(error);
         enqueueSnackbar("Error deleting sudoku", { variant: "error" });
       });
+  };
+
+  const onLevelStartContinue = () => {
+    if (selectedLevel) {
+      push(PATH_DASHBOARD.play.sudoku(selectedLevel.level.sudokuId));
+    }
   };
 
   // EFFECTS
@@ -99,6 +108,7 @@ export default function LevelCard({
               sx={{ backgroundColor: PRIMARY.main }}
               variant="contained"
               fullWidth
+              onClick={onLevelStartContinue}
             >
               {selectedSavedLevel ? "Continue" : "Start"}
             </Button>

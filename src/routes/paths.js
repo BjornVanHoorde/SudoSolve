@@ -30,6 +30,7 @@ export const PATH_DASHBOARD = {
     difficulty: (difficulty) => path(ROOTS_DASHBOARD, `/play/${difficulty}`),
     mySudokus: path(ROOTS_DASHBOARD, "/play/my-sudokus"),
     generate: path(ROOTS_DASHBOARD, "/play/generate"),
+    sudoku: (id) => path(ROOTS_DASHBOARD, `/play/sudoku/${id}`),
   },
   scan: {
     root: path(ROOTS_DASHBOARD, "/scan"),
