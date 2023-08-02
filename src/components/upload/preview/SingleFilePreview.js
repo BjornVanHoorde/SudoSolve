@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 //
-import Image from '../../image';
+import Image from "../../image";
 
 // ----------------------------------------------------------------------
 
@@ -13,20 +13,23 @@ export default function SingleFilePreview({ file }) {
     return null;
   }
 
-  const imgUrl = typeof file === 'string' ? file : file.preview;
+  const imgUrl = typeof file === "string" ? file : file.path;
+
+  console.log("imgUrl", imgUrl);
+  console.log("file", file);
 
   return (
     <Image
       alt="file preview"
-      src={imgUrl}
+      src={URL.createObjectURL(file)}
       sx={{
         top: 8,
         left: 8,
         zIndex: 8,
         borderRadius: 1,
-        position: 'absolute',
-        width: 'calc(100% - 16px)',
-        height: 'calc(100% - 16px)',
+        position: "absolute",
+        width: "calc(100% - 16px)",
+        height: "calc(100% - 16px)",
       }}
     />
   );

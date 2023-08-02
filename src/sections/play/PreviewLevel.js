@@ -12,7 +12,7 @@ import { useEffect } from "react";
 
 // EXPORT
 // ------------------------------------------------------------------------------------------------
-export default function PreviewLevel({ level, size = 28 }) {
+export default function PreviewLevel({ level, size = 25 }) {
   // DATA & METHODS
   // ------------------------------------------------------------------------------------------------
   const theme = useTheme();
@@ -79,7 +79,7 @@ export default function PreviewLevel({ level, size = 28 }) {
                       textAlign="center"
                       sx={{
                         fontSize: size / 2,
-                        fontWeight: 600,
+                        fontWeight: level.board[row][col].isGiven ? 700 : 300,
                         lineHeight: `${size}px`,
                         height: size,
                         width: size,

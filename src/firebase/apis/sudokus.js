@@ -9,9 +9,16 @@ import {
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { FIREBASE_API } from "../../config-global";
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
 
 const app = initializeApp(FIREBASE_API);
 const firestore = getFirestore(app);
+const storage = getStorage(app);
 
 export const initialStateSudoku = {
   sudokuId: "",
@@ -81,6 +88,18 @@ export const fb_delete_sudoku = (id) => {
   } catch (error) {
     console.error(
       "[APIS - sudokus] ( delete_sudoku ) - Failed to delete sudoku => ",
+      error
+    );
+  }
+};
+
+export const fb_uploadPicture = (id, file, fileName) => {
+  try {
+    const storageRef = ref(storage, `sudokus/${id}/${fileName}`);
+    return uploadBytesResumable(storageRef, file);
+  } catch (error) {
+    console.error(
+      "[APIS - sudokus] ( uploadPicture ) - Failed to upload picture => ",
       error
     );
   }

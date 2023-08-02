@@ -21,6 +21,7 @@ import CustomBreadcrumbs from "src/components/custom-breadcrumbs/CustomBreadcrum
 import { fb_update_user } from "src/firebase/apis/users";
 import { useContext, useEffect, useState } from "react";
 import { dataContext } from "src/firebase/dataProvider";
+import ColorPresetsOptions from "src/components/settings/drawer/ColorPresetsOptions";
 
 // GLOBALS
 // ------------------------------------------------------------------------------------------------
@@ -158,6 +159,7 @@ export default function SettingsIndexScreen() {
             <Grid item xs={4}>
               <Card sx={{ p: 3 }}>
                 <Typography variant="h6">Themes</Typography>
+                <ColorPresetsOptions />
               </Card>
             </Grid>
           </Grid>

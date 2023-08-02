@@ -36,13 +36,13 @@ export default function LevelGrid({
   // COMPONENT
   // ------------------------------------------------------------------------------------------------
   return (
-    <Grid container spacing={3}>
+    <Grid container spacing={3} justifyContent="start" alignItems="center">
       {levels.map((level, index) => (
-        <Grid item xs={2} key={index}>
+        <Grid item key={index}>
           <Card
             sx={{
-              width: 50,
-              height: 50,
+              width: 45,
+              height: 45,
               margin: "0 auto",
               display: "flex",
               justifyContent: "center",

@@ -5,6 +5,7 @@ import { alpha, styled } from "@mui/material/styles";
 import { Box } from "@mui/material";
 //
 import Logo from "../logo";
+import { PRIMARY } from "src/theme/palette";
 
 // ----------------------------------------------------------------------
 
@@ -71,8 +72,7 @@ export default function LoadingScreen() {
           width: 100,
           height: 100,
           position: "absolute",
-          border: (theme) =>
-            `solid 3px ${alpha(theme.palette.primary.dark, 0.24)}`,
+          border: (theme) => `solid 3px ${alpha(PRIMARY.dark, 0.24)}`,
         }}
       />
 
@@ -93,8 +93,7 @@ export default function LoadingScreen() {
           width: 120,
           height: 120,
           position: "absolute",
-          border: (theme) =>
-            `solid 8px ${alpha(theme.palette.primary.dark, 0.24)}`,
+          border: (theme) => `solid 8px ${alpha(PRIMARY.dark, 0.24)}`,
         }}
       />
     </StyledRoot>

@@ -29,6 +29,9 @@ import { isMobileContext } from "src/utils/isMobileProvider";
 import { transformGenerateSudoku } from "src/utils/transformGenratedSudoku";
 import { useSnackbar } from "src/components/snackbar";
 import Iconify from "src/components/iconify/Iconify";
+import { loaderAnimation2 } from "src/utils/loaderAnimation2";
+import Lottie from "lottie-react";
+import { loaderAnimation } from "src/utils/loaderAnimation";
 
 // GLOBALS
 // ------------------------------------------------------------------------------------------------
@@ -118,7 +121,7 @@ export default function playGenerateScreen() {
   // ------------------------------------------------------------------------------------------------
 
   // COMPONENT
-  // ------------------------------------------------------------------------------------------------
+  // ------------------------------------------------------------------------------------------------1
   return (
     <>
       <Head>
@@ -139,6 +142,19 @@ export default function playGenerateScreen() {
         {difficulty && !isMobile && (
           <Card sx={{ p: 5, mt: 3 }}>
             <Grid container spacing={3}>
+              {!sudoku && (
+                <Lottie
+                  animationData={loaderAnimation2}
+                  style={{
+                    width: 75,
+                    height: 75,
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                  }}
+                />
+              )}
               {sudoku && (
                 <>
                   <Grid item xs={8}>
@@ -152,20 +168,41 @@ export default function playGenerateScreen() {
                     >
                       <Button
                         variant="contained"
-                        sx={{ backgroundColor: PRIMARY.main }}
+                        sx={{
+                          backgroundColor: PRIMARY.main,
+                          color: "#fff",
+                          "&:hover": {
+                            backgroundColor: PRIMARY.dark,
+                            boxShadow: "none",
+                          },
+                        }}
                       >
                         Play
                       </Button>
                       <Button
                         variant="outlined"
-                        sx={{ borderColor: PRIMARY.main }}
+                        sx={{
+                          borderColor: PRIMARY.main,
+                          color: PRIMARY.main,
+                          "&:hover": {
+                            backgroundColor: PRIMARY.lighter,
+                            borderColor: PRIMARY.light,
+                          },
+                        }}
                         onClick={handleSave}
                       >
                         Save for later
                       </Button>
                       <Button
                         variant="outlined"
-                        sx={{ borderColor: PRIMARY.main }}
+                        sx={{
+                          borderColor: PRIMARY.main,
+                          color: PRIMARY.main,
+                          "&:hover": {
+                            backgroundColor: PRIMARY.lighter,
+                            borderColor: PRIMARY.light,
+                          },
+                        }}
                         onClick={() => handleClick(difficulty)}
                       >
                         Generate again
@@ -202,12 +239,15 @@ export default function playGenerateScreen() {
               </Stack>
 
               <Grid container spacing={3}>
+                {!sudoku && (
+                  <Lottie animation={loaderAnimation2} height={200} />
+                )}
                 {sudoku && (
                   <>
-                    <Grid item xs={12}>
+                    <Grid item xs={12} md={6}>
                       <PreviewLevel level={sudoku} />
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid item xs={12} md={6}>
                       <Stack
                         spacing={2}
                         justifyContent="end"
@@ -215,20 +255,41 @@ export default function playGenerateScreen() {
                       >
                         <Button
                           variant="contained"
-                          sx={{ backgroundColor: PRIMARY.main }}
+                          sx={{
+                            backgroundColor: PRIMARY.main,
+                            color: "#fff",
+                            "&:hover": {
+                              backgroundColor: PRIMARY.dark,
+                              boxShadow: "none",
+                            },
+                          }}
                         >
                           Play
                         </Button>
                         <Button
                           variant="outlined"
-                          sx={{ borderColor: PRIMARY.main }}
+                          sx={{
+                            borderColor: PRIMARY.main,
+                            color: PRIMARY.main,
+                            "&:hover": {
+                              backgroundColor: PRIMARY.lighter,
+                              borderColor: PRIMARY.light,
+                            },
+                          }}
                           onClick={handleSave}
                         >
                           Save for later
                         </Button>
                         <Button
                           variant="outlined"
-                          sx={{ borderColor: PRIMARY.main }}
+                          sx={{
+                            borderColor: PRIMARY.main,
+                            color: PRIMARY.main,
+                            "&:hover": {
+                              backgroundColor: PRIMARY.lighter,
+                              borderColor: PRIMARY.light,
+                            },
+                          }}
                           onClick={() => handleClick(difficulty)}
                         >
                           Generate again
