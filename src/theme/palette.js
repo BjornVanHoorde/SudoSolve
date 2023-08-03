@@ -28,7 +28,7 @@ const GREY = {
 
 export const PRIMARY = {
   lightestest: "#C1ECE9",
-  lightest: "#9AE0DB",
+  lightest: "#7ACFC9",
   lighter: "#5ABFB7",
   light: "#3CA89E",
   main: "#177775",

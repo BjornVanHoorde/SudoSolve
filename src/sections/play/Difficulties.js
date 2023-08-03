@@ -48,7 +48,7 @@ export default function Difficulties({ onClick, selectedDifficulty }) {
     <Stack
       direction={isMobile ? "column" : "row"}
       spacing={2}
-      justifyContent="space-evenly"
+      justifyContent="space-between"
     >
       {difficulties.array.map((difficulty, index) => (
         <Card

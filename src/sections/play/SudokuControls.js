@@ -12,7 +12,12 @@ import Iconify from "src/components/iconify/Iconify";
 
 // EXPORT
 // ------------------------------------------------------------------------------------------------
-export default function SudokuControls() {
+export default function SudokuControls({
+  highlightedNumber,
+  onNumberClick,
+  settings,
+  handleNoteClick,
+}) {
   // DATA & METHODS
   // ------------------------------------------------------------------------------------------------
   const theme = useTheme();
@@ -55,17 +60,44 @@ export default function SudokuControls() {
         {selectedTab === "number" && (
           <Grid container spacing={1} sx={{ height: "100%" }}>
             <Grid item xs={4}>
-              <Box sx={buttonStyle}>
+              <Box
+                sx={{
+                  ...buttonStyle,
+                  backgroundColor:
+                    highlightedNumber === 1 && settings.HMN
+                      ? theme.palette.primary.lightest
+                      : "transparent",
+                }}
+                onClick={() => onNumberClick(1)}
+              >
                 <Typography variant="h3">1</Typography>
               </Box>
             </Grid>
             <Grid item xs={4}>
-              <Box sx={buttonStyle}>
+              <Box
+                sx={{
+                  ...buttonStyle,
+                  backgroundColor:
+                    highlightedNumber === 2 && settings.HMN
+                      ? theme.palette.primary.lightest
+                      : "transparent",
+                }}
+                onClick={() => onNumberClick(2)}
+              >
                 <Typography variant="h3">2</Typography>
               </Box>
             </Grid>
             <Grid item xs={4}>
-              <Box sx={buttonStyle}>
+              <Box
+                sx={{
+                  ...buttonStyle,
+                  backgroundColor:
+                    highlightedNumber === 3 && settings.HMN
+                      ? theme.palette.primary.lightest
+                      : "transparent",
+                }}
+                onClick={() => onNumberClick(3)}
+              >
                 <Typography variant="h3">3</Typography>
               </Box>
             </Grid>
@@ -80,7 +112,12 @@ export default function SudokuControls() {
                   justifyContent: "start",
                   alignItems: "start",
                   pl: 0.5,
+                  backgroundColor:
+                    highlightedNumber === 1 && settings.HMN
+                      ? theme.palette.primary.lightest
+                      : "transparent",
                 }}
+                onClick={() => handleNoteClick(1)}
               >
                 <Typography variant="h3alt">1</Typography>
               </Box>
@@ -91,7 +128,12 @@ export default function SudokuControls() {
                   ...buttonStyle,
                   justifyContent: "center",
                   alignItems: "start",
+                  backgroundColor:
+                    highlightedNumber === 2 && settings.HMN
+                      ? theme.palette.primary.lightest
+                      : "transparent",
                 }}
+                onClick={() => handleNoteClick(2)}
               >
                 <Typography variant="h3alt">2</Typography>
               </Box>
@@ -103,7 +145,12 @@ export default function SudokuControls() {
                   justifyContent: "end",
                   alignItems: "start",
                   pr: 0.5,
+                  backgroundColor:
+                    highlightedNumber === 3 && settings.HMN
+                      ? theme.palette.primary.lightest
+                      : "transparent",
                 }}
+                onClick={() => handleNoteClick(3)}
               >
                 <Typography variant="h3alt">3</Typography>
               </Box>
@@ -159,17 +206,44 @@ export default function SudokuControls() {
         {selectedTab === "number" && (
           <Grid container spacing={1} sx={{ height: "100%" }}>
             <Grid item xs={4}>
-              <Box sx={buttonStyle}>
+              <Box
+                sx={{
+                  ...buttonStyle,
+                  backgroundColor:
+                    highlightedNumber === 4 && settings.HMN
+                      ? theme.palette.primary.lightest
+                      : "transparent",
+                }}
+                onClick={() => onNumberClick(4)}
+              >
                 <Typography variant="h3">4</Typography>
               </Box>
             </Grid>
             <Grid item xs={4}>
-              <Box sx={buttonStyle}>
+              <Box
+                sx={{
+                  ...buttonStyle,
+                  backgroundColor:
+                    highlightedNumber === 5 && settings.HMN
+                      ? theme.palette.primary.lightest
+                      : "transparent",
+                }}
+                onClick={() => onNumberClick(5)}
+              >
                 <Typography variant="h3">5</Typography>
               </Box>
             </Grid>
             <Grid item xs={4}>
-              <Box sx={buttonStyle}>
+              <Box
+                sx={{
+                  ...buttonStyle,
+                  backgroundColor:
+                    highlightedNumber === 6 && settings.HMN
+                      ? theme.palette.primary.lightest
+                      : "transparent",
+                }}
+                onClick={() => onNumberClick(6)}
+              >
                 <Typography variant="h3">6</Typography>
               </Box>
             </Grid>
@@ -184,7 +258,12 @@ export default function SudokuControls() {
                   justifyContent: "start",
                   alignItems: "center",
                   pl: 0.5,
+                  backgroundColor:
+                    highlightedNumber === 4 && settings.HMN
+                      ? theme.palette.primary.lightest
+                      : "transparent",
                 }}
+                onClick={() => handleNoteClick(4)}
               >
                 <Typography variant="h3alt">4</Typography>
               </Box>
@@ -195,7 +274,12 @@ export default function SudokuControls() {
                   ...buttonStyle,
                   justifyContent: "center",
                   alignItems: "center",
+                  backgroundColor:
+                    highlightedNumber === 5 && settings.HMN
+                      ? theme.palette.primary.lightest
+                      : "transparent",
                 }}
+                onClick={() => handleNoteClick(5)}
               >
                 <Typography variant="h3alt">5</Typography>
               </Box>
@@ -207,7 +291,12 @@ export default function SudokuControls() {
                   justifyContent: "end",
                   alignItems: "center",
                   pr: 0.5,
+                  backgroundColor:
+                    highlightedNumber === 6 && settings.HMN
+                      ? theme.palette.primary.lightest
+                      : "transparent",
                 }}
+                onClick={() => handleNoteClick(6)}
               >
                 <Typography variant="h3alt">6</Typography>
               </Box>
@@ -303,17 +392,44 @@ export default function SudokuControls() {
         {selectedTab === "number" && (
           <Grid container spacing={1} sx={{ height: "100%" }}>
             <Grid item xs={4}>
-              <Box sx={buttonStyle}>
+              <Box
+                sx={{
+                  ...buttonStyle,
+                  backgroundColor:
+                    highlightedNumber === 7 && settings.HMN
+                      ? theme.palette.primary.lightest
+                      : "transparent",
+                }}
+                onClick={() => onNumberClick(7)}
+              >
                 <Typography variant="h3">7</Typography>
               </Box>
             </Grid>
             <Grid item xs={4}>
-              <Box sx={buttonStyle}>
+              <Box
+                sx={{
+                  ...buttonStyle,
+                  backgroundColor:
+                    highlightedNumber === 8 && settings.HMN
+                      ? theme.palette.primary.lightest
+                      : "transparent",
+                }}
+                onClick={() => onNumberClick(8)}
+              >
                 <Typography variant="h3">8</Typography>
               </Box>
             </Grid>
             <Grid item xs={4}>
-              <Box sx={buttonStyle}>
+              <Box
+                sx={{
+                  ...buttonStyle,
+                  backgroundColor:
+                    highlightedNumber === 9 && settings.HMN
+                      ? theme.palette.primary.lightest
+                      : "transparent",
+                }}
+                onClick={() => onNumberClick(9)}
+              >
                 <Typography variant="h3">9</Typography>
               </Box>
             </Grid>
@@ -328,7 +444,12 @@ export default function SudokuControls() {
                   justifyContent: "start",
                   alignItems: "end",
                   pl: 0.5,
+                  backgroundColor:
+                    highlightedNumber === 7 && settings.HMN
+                      ? theme.palette.primary.lightest
+                      : "transparent",
                 }}
+                onClick={() => handleNoteClick(7)}
               >
                 <Typography variant="h3alt">7</Typography>
               </Box>
@@ -339,7 +460,12 @@ export default function SudokuControls() {
                   ...buttonStyle,
                   justifyContent: "center",
                   alignItems: "end",
+                  backgroundColor:
+                    highlightedNumber === 8 && settings.HMN
+                      ? theme.palette.primary.lightest
+                      : "transparent",
                 }}
+                onClick={() => handleNoteClick(8)}
               >
                 <Typography variant="h3alt">8</Typography>
               </Box>
@@ -351,7 +477,12 @@ export default function SudokuControls() {
                   justifyContent: "end",
                   alignItems: "end",
                   pr: 0.5,
+                  backgroundColor:
+                    highlightedNumber === 9 && settings.HMN
+                      ? theme.palette.primary.lightest
+                      : "transparent",
                 }}
+                onClick={() => handleNoteClick(9)}
               >
                 <Typography variant="h3alt">9</Typography>
               </Box>
@@ -425,7 +556,16 @@ export default function SudokuControls() {
             </Box>
           </Grid>
           <Grid item xs={4}>
-            <Box sx={buttonStyle}>
+            <Box
+              sx={buttonStyle}
+              onClick={() => {
+                selectedTab === "number"
+                  ? onNumberClick(0)
+                  : selectedTab === "notes"
+                  ? handleNoteClick(0)
+                  : null;
+              }}
+            >
               <Iconify
                 icon="mdi:window-close"
                 width="90%"

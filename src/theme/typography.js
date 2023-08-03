@@ -111,6 +111,9 @@ const typography = {
     lineHeight: 1.5,
     fontSize: pxToRem(15),
   },
+  notes: {
+    fontSize: pxToRem(15),
+  },
   overline: {
     fontWeight: 700,
     lineHeight: 1.5,

@@ -3,8 +3,8 @@
 
 // IMPORTS
 // ------------------------------------------------------------------------------------------------
-import { Box, Typography, useTheme } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Box, Grid, Typography, useTheme } from "@mui/material";
+import { useState } from "react";
 
 // GLOBALS
 // ------------------------------------------------------------------------------------------------
@@ -16,6 +16,8 @@ export default function Sudoku({
   size = 25,
   onCellSelect,
   selectedCells,
+  highlightedNumber,
+  settings,
 }) {
   // DATA & METHODS
   // ------------------------------------------------------------------------------------------------
@@ -39,6 +41,31 @@ export default function Sudoku({
   const handleCellMouseEnter = (row, col) => {
     if (isMouseDown) {
       onCellSelect(row, col, true);
+    }
+  };
+
+  const checkInBox = (row, col) => {
+    if (selectedCells.length === 0) return false;
+    const startRow =
+      selectedCells[0].row.substring(1) -
+      1 -
+      ((selectedCells[0].row.substring(1) - 1) % 3) +
+      1;
+    const startCol =
+      selectedCells[0].col.substring(1) -
+      1 -
+      ((selectedCells[0].col.substring(1) - 1) % 3) +
+      1;
+
+    for (let i = startRow; i < startRow + 3; i++) {
+      for (let j = startCol; j < startCol + 3; j++) {
+        if (
+          i === parseInt(row.substring(1)) &&
+          j === parseInt(col.substring(1))
+        ) {
+          return true;
+        }
+      }
     }
   };
 
@@ -76,6 +103,7 @@ export default function Sudoku({
                   <Box
                     key={`${row}-${col}`}
                     sx={{
+                      position: "relative",
                       display: "inline-block",
                       width: size,
                       height: size,
@@ -91,11 +119,27 @@ export default function Sudoku({
                           : `1px solid ${theme.palette.primary.lighter}`,
                       m: 0,
                       cursor: "pointer",
-                      backgroundColor: selectedCells.some(
-                        (cell) => cell.row === row && cell.col === col
-                      )
-                        ? theme.palette.primary.lightest
-                        : "transparent",
+                      backgroundColor:
+                        level.board[row][col].value !== 0 &&
+                        level.board[row][col].value !==
+                          level.board[row][col].correctValue &&
+                        settings.HE
+                          ? "red"
+                          : selectedCells.some(
+                              (cell) => cell.row === row && cell.col === col
+                            )
+                          ? theme.palette.primary.lightest
+                          : highlightedNumber === level.board[row][col].value &&
+                            highlightedNumber !== 0 &&
+                            settings.HMN
+                          ? theme.palette.primary.lightest
+                          : selectedCells.length === 1 &&
+                            (row === selectedCells[0].row ||
+                              col === selectedCells[0].col ||
+                              checkInBox(row, col)) &&
+                            settings.HRC
+                          ? theme.palette.primary.lightestest
+                          : "transparent",
                     }}
                     onClick={() => {
                       handleCellClick(row, col);
@@ -104,12 +148,72 @@ export default function Sudoku({
                       handleCellMouseEnter(row, col);
                     }}
                   >
+                    {!level.board[row][col].value && (
+                      <Grid
+                        container
+                        sx={{
+                          position: "absolute",
+                          top: 0,
+                          p: 0,
+                          m: 0,
+                        }}
+                      >
+                        {Array.from({ length: 9 }, (_, i) => i + 1).map(
+                          (note, index) => (
+                            <Grid
+                              item
+                              key={index}
+                              xs={4}
+                              sx={{
+                                mb: -0.35,
+                                mt: -0.35,
+                                backgroundColor:
+                                  highlightedNumber === note &&
+                                  highlightedNumber !== 0 &&
+                                  level.board[row][col].notes.includes(note) &&
+                                  settings.HMN
+                                    ? theme.palette.primary.lightest
+                                    : " ",
+                                fontWeight:
+                                  highlightedNumber === note &&
+                                  highlightedNumber !== 0 &&
+                                  level.board[row][col].notes.includes(note) &&
+                                  settings.HMN
+                                    ? 900
+                                    : " ",
+                              }}
+                            >
+                              <Typography
+                                color={
+                                  !level.board[row][col].notes.includes(note)
+                                    ? "transparent"
+                                    : ""
+                                }
+                                sx={{}}
+                                variant="notes"
+                              >
+                                {level.board[row][col].notes.includes(note)
+                                  ? note
+                                  : 0}
+                              </Typography>
+                            </Grid>
+                          )
+                        )}
+                      </Grid>
+                    )}
                     <Typography
                       color={
                         selectedCells.some(
                           (cell) => cell.row === row && cell.col === col
                         ) && !level.board[row][col].value
                           ? theme.palette.primary.lightest
+                          : selectedCells.length === 1 &&
+                            (row === selectedCells[0].row ||
+                              col === selectedCells[0].col ||
+                              checkInBox(row, col)) &&
+                            !level.board[row][col].value &&
+                            settings.HRC
+                          ? theme.palette.primary.lightestest
                           : level.board[row][col].value
                           ? "black"
                           : "white"
