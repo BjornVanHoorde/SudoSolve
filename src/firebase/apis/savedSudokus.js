@@ -20,7 +20,10 @@ export const initialStateSavedSudoku = {
   difficulty: "",
   originalSudokuId: "",
   isSolved: false,
-  time: 0,
+  time: {
+    minutes: 0,
+    seconds: 0,
+  },
   board: [],
 };
 

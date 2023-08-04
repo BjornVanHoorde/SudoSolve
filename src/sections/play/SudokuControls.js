@@ -17,6 +17,7 @@ export default function SudokuControls({
   onNumberClick,
   settings,
   handleNoteClick,
+  handlePaletteClick,
 }) {
   // DATA & METHODS
   // ------------------------------------------------------------------------------------------------
@@ -165,6 +166,7 @@ export default function SudokuControls({
                   ...buttonStyle,
                   backgroundColor: "rgba(255, 0, 0, 0.5)",
                 }}
+                onClick={() => handlePaletteClick("rgba(255, 0, 0, 0.5)")}
               ></Box>
             </Grid>
             <Grid item xs={4}>
@@ -173,6 +175,7 @@ export default function SudokuControls({
                   ...buttonStyle,
                   backgroundColor: "rgba(0, 0, 255, 0.5)",
                 }}
+                onClick={() => handlePaletteClick("rgba(0, 0, 255, 0.5)")}
               ></Box>
             </Grid>
             <Grid item xs={4}>
@@ -181,6 +184,7 @@ export default function SudokuControls({
                   ...buttonStyle,
                   backgroundColor: "rgba(0, 255, 0, 0.5)",
                 }}
+                onClick={() => handlePaletteClick("rgba(0, 255, 0, 0.5)")}
               ></Box>
             </Grid>
           </Grid>
@@ -311,6 +315,7 @@ export default function SudokuControls({
                   ...buttonStyle,
                   backgroundColor: "rgba(255, 255, 0, 0.5)",
                 }}
+                onClick={() => handlePaletteClick("rgba(255, 255, 0, 0.5)")}
               ></Box>
             </Grid>
             <Grid item xs={4}>
@@ -319,6 +324,7 @@ export default function SudokuControls({
                   ...buttonStyle,
                   backgroundColor: "rgba(255, 165, 0, 0.5)",
                 }}
+                onClick={() => handlePaletteClick("rgba(255, 165, 0, 0.5)")}
               ></Box>
             </Grid>
             <Grid item xs={4}>
@@ -327,6 +333,7 @@ export default function SudokuControls({
                   ...buttonStyle,
                   backgroundColor: "rgba(128, 0, 128, 0.5)",
                 }}
+                onClick={() => handlePaletteClick("rgba(128, 0, 128, 0.5)")}
               ></Box>
             </Grid>
           </Grid>
@@ -497,6 +504,7 @@ export default function SudokuControls({
                   ...buttonStyle,
                   backgroundColor: "rgba(255, 192, 203, 0.5)",
                 }}
+                onClick={() => handlePaletteClick("rgba(255, 192, 203, 0.5)")}
               ></Box>
             </Grid>
             <Grid item xs={4}>
@@ -505,6 +513,7 @@ export default function SudokuControls({
                   ...buttonStyle,
                   backgroundColor: "rgba(165, 42, 42, 0.5)",
                 }}
+                onClick={() => handlePaletteClick("rgba(165, 42, 42, 0.5)")}
               ></Box>
             </Grid>
             <Grid item xs={4}>
@@ -513,12 +522,13 @@ export default function SudokuControls({
                   ...buttonStyle,
                   backgroundColor: "rgba(0, 255, 255, 0.5)",
                 }}
+                onClick={() => handlePaletteClick("rgba(0, 255, 255, 0.5)")}
               ></Box>
             </Grid>
           </Grid>
         )}
       </Grid>
-      <Grid item xs={3}>
+      {/* <Grid item xs={3}>
         <Box
           sx={{
             ...buttonStyle,
@@ -534,26 +544,39 @@ export default function SudokuControls({
         >
           <Iconify icon="mdi:palette" width="90%" sx={{ maxWidth: 70 }} />
         </Box>
+      </Grid> */}
+      <Grid item xs={3}>
+        <Box
+          sx={{
+            ...buttonStyle,
+          }}
+        >
+          <Iconify
+            icon="mdi:lightbulb-variant-outline"
+            width="90%"
+            sx={{ maxWidth: 70 }}
+          />
+        </Box>
       </Grid>
       <Grid item xs={9}>
         <Grid container spacing={1} sx={{ height: "100%" }}>
           <Grid item xs={4}>
-            <Box sx={buttonStyle}>
+            {/* <Box onClick={onPreviousClick} sx={buttonStyle}>
               <Iconify
                 icon="mdi:arrow-u-left-top"
                 width="90%"
                 sx={{ maxWidth: 70 }}
               />
-            </Box>
+            </Box> */}
           </Grid>
           <Grid item xs={4}>
-            <Box sx={buttonStyle}>
+            {/* <Box onClick={onNextClick} sx={buttonStyle}>
               <Iconify
                 icon="mdi:arrow-u-right-top"
                 width="90%"
                 sx={{ maxWidth: 70 }}
               />
-            </Box>
+            </Box> */}
           </Grid>
           <Grid item xs={4}>
             <Box
@@ -574,19 +597,6 @@ export default function SudokuControls({
             </Box>
           </Grid>
         </Grid>
-      </Grid>
-      <Grid item xs={3}>
-        <Box
-          sx={{
-            ...buttonStyle,
-          }}
-        >
-          <Iconify
-            icon="mdi:lightbulb-variant-outline"
-            width="90%"
-            sx={{ maxWidth: 70 }}
-          />
-        </Box>
       </Grid>
     </Grid>
   );

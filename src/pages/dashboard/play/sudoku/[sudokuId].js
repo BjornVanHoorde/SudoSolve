@@ -3,18 +3,32 @@
 
 // IMPORTS
 // ------------------------------------------------------------------------------------------------
-import { Card, Container, Grid, Stack, Typography } from "@mui/material";
+import {
+  Card,
+  Container,
+  Grid,
+  IconButton,
+  Stack,
+  Typography,
+} from "@mui/material";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
+import { useStopwatch } from "react-timer-hook";
 import { useAuthContext } from "src/auth/useAuthContext";
+import Iconify from "src/components/iconify/Iconify";
 import { useSettingsContext } from "src/components/settings";
-import { fb_create_savedSudoku } from "src/firebase/apis/savedSudokus";
+import {
+  fb_create_savedSudoku,
+  fb_update_savedSudoku,
+} from "src/firebase/apis/savedSudokus";
 import { dataContext } from "src/firebase/dataProvider";
 import DashboardLayout from "src/layouts/dashboard/DashboardLayout";
 import Sudoku from "src/sections/play/Sudoku";
 import SudokuControls from "src/sections/play/SudokuControls";
 import { isMobileContext } from "src/utils/isMobileProvider";
+import { usePageFocus } from "src/hooks/usePageFocus";
+import { usePageVisibility } from "src/hooks/usePageVisibility";
 
 // GLOBALS
 // ------------------------------------------------------------------------------------------------
@@ -32,6 +46,8 @@ export default function playSudokuScreen() {
   const { isMobile } = useContext(isMobileContext);
   const { savedSudokus, sudokus, users } = useContext(dataContext);
   const { sudokuId } = useRouter().query;
+  const selectedSavedSudokuRef = useRef();
+  const timerRef = useRef();
 
   // STATES
   // ------------------------------------------------------------------------------------------------
@@ -42,8 +58,27 @@ export default function playSudokuScreen() {
   const [selectedCells, setSelectedCells] = useState([]);
   const [highlightedNumber, setHighlightedNumber] = useState(null);
 
+  const [isTimerSet, setIsTimerSet] = useState(false);
+  const [savingState, setSavingState] = useState(false);
+
   // VARIABLES
   // ------------------------------------------------------------------------------------------------
+  const {
+    totalSeconds,
+    seconds,
+    minutes,
+    hours,
+    days,
+    isRunning,
+    start,
+    pause,
+    reset,
+  } = useStopwatch({
+    autoStart: true,
+  });
+
+  const isVisible = usePageVisibility();
+  const isFocussed = usePageFocus();
 
   // FUNCTIONS
   // ------------------------------------------------------------------------------------------------
@@ -124,6 +159,17 @@ export default function playSudokuScreen() {
         ...selectedSavedSudoku,
         board: newBoard,
       });
+
+      setSavingState(true);
+      fb_update_savedSudoku(selectedSavedSudoku.sudokuId, {
+        ...selectedSavedSudoku,
+        time: {
+          seconds: seconds,
+          minutes: minutes,
+        },
+      }).then(() => {
+        setSavingState(false);
+      });
     }
   };
 
@@ -159,13 +205,49 @@ export default function playSudokuScreen() {
         ...selectedSavedSudoku,
         board: newBoard,
       });
+
+      setSavingState(true);
+      fb_update_savedSudoku(selectedSavedSudoku.sudokuId, {
+        ...selectedSavedSudoku,
+        time: {
+          seconds: seconds,
+          minutes: minutes,
+        },
+      }).then(() => {
+        setSavingState(false);
+      });
     }
+  };
+
+  const handlePaletteClick = (color) => {
+    if (selectedCells.length === 0) return;
+
+    const newBoard = { ...selectedSavedSudoku.board };
+    selectedCells.forEach((cell) => {
+      if (newBoard[cell.row][cell.col].isGiven) return;
+      newBoard[cell.row][cell.col].color = color;
+    });
+    setSelectedSavedSudoku({
+      ...selectedSavedSudoku,
+      board: newBoard,
+    });
+
+    setSavingState(true);
+    fb_update_savedSudoku(selectedSavedSudoku.sudokuId, {
+      ...selectedSavedSudoku,
+      time: {
+        seconds: seconds,
+        minutes: minutes,
+      },
+    }).then(() => {
+      setSavingState(false);
+    });
   };
 
   // EFFECTS
   // ------------------------------------------------------------------------------------------------
   useEffect(() => {
-    if ((sudokuId, sudokus, savedSudokus)) {
+    if (sudokuId && sudokus && savedSudokus && !savingState) {
       const sudoku = sudokus.find((s) => s.sudokuId === sudokuId);
       const savedSudoku = savedSudokus.find(
         (s) => s.originalSudokuId === sudokuId && s.userId === user.userId
@@ -184,7 +266,10 @@ export default function playSudokuScreen() {
           userId: user.userId,
           originalSudokuId: sudokuId,
           isSolved: false,
-          time: 0,
+          time: {
+            seconds: 0,
+            minutes: 0,
+          },
         });
       }
     }
@@ -198,6 +283,7 @@ export default function playSudokuScreen() {
   }, [user, users]);
 
   useEffect(() => {
+    if (savingState) return;
     if (selectedCells.length === 1) {
       setHighlightedNumber(
         selectedSavedSudoku?.board[selectedCells[0].row][selectedCells[0].col]
@@ -207,6 +293,64 @@ export default function playSudokuScreen() {
       setHighlightedNumber(null);
     }
   }, [selectedCells, selectedSavedSudoku]);
+
+  useEffect(() => {
+    const autosave = setInterval(() => {
+      if (selectedSavedSudokuRef.current) {
+        setSavingState(true);
+        fb_update_savedSudoku(selectedSavedSudokuRef.current.sudokuId, {
+          ...selectedSavedSudokuRef.current,
+          time: {
+            seconds: timerRef.current.seconds,
+            minutes: timerRef.current.minutes,
+          },
+        }).then(() => {
+          setSavingState(false);
+        });
+      }
+    }, 10 * 1000); // runs every 10s
+    return () => {
+      clearInterval(autosave); // clear autosave on dismount
+    };
+  }, []);
+
+  useEffect(() => {
+    if (savingState) return;
+    selectedSavedSudokuRef.current = selectedSavedSudoku;
+  }, [selectedSavedSudoku]);
+
+  useEffect(() => {
+    if (!selectedSavedSudoku) return;
+    if (isTimerSet) {
+      timerRef.current = {
+        seconds,
+        minutes,
+      };
+    } else {
+      timerRef.current = {
+        seconds: selectedSavedSudoku.time.seconds,
+        minutes: selectedSavedSudoku.time.minutes,
+      };
+      const offsetTimestamp = new Date();
+      offsetTimestamp.setSeconds(
+        offsetTimestamp.getSeconds() + timerRef.current.seconds
+      );
+      offsetTimestamp.setMinutes(
+        offsetTimestamp.getMinutes() + timerRef.current.minutes
+      );
+
+      reset(offsetTimestamp);
+      setIsTimerSet(true);
+    }
+  }, [selectedSavedSudoku, seconds, minutes, reset]);
+
+  useEffect(() => {
+    if (isVisible && isFocussed) {
+      start();
+    } else {
+      pause();
+    }
+  }, [isVisible, isFocussed]);
 
   // COMPONENT
   // ------------------------------------------------------------------------------------------------1
@@ -230,6 +374,7 @@ export default function playSudokuScreen() {
                       selectedCells={selectedCells}
                       highlightedNumber={highlightedNumber}
                       settings={settings}
+                      isRunning={isRunning}
                     />
                   )}
                 </Card>
@@ -237,7 +382,27 @@ export default function playSudokuScreen() {
               <Grid item xs={12} lg={4}>
                 <Stack spacing={2}>
                   <Card sx={{ p: 2, textAlign: "center" }}>
-                    <Typography variant="h4">00:00</Typography>
+                    <Stack
+                      direction="row"
+                      spacing={2}
+                      justifyContent="center"
+                      alignItems="center"
+                    >
+                      <Typography variant="h4">{`${
+                        minutes < 10 ? "0" + minutes : minutes
+                      }:${seconds < 10 ? "0" + seconds : seconds}`}</Typography>
+                      <IconButton
+                        onClick={() => {
+                          if (isRunning) {
+                            pause();
+                          } else {
+                            start();
+                          }
+                        }}
+                      >
+                        <Iconify icon={isRunning ? "mdi:pause" : "mdi:play"} />
+                      </IconButton>
+                    </Stack>
                   </Card>
                   <Card sx={{ p: 2, textAlign: "center" }}>
                     <SudokuControls
@@ -245,6 +410,7 @@ export default function playSudokuScreen() {
                       settings={settings}
                       onNumberClick={handleNumberClick}
                       handleNoteClick={handleNoteClick}
+                      handlePaletteClick={handlePaletteClick}
                     />
                   </Card>
                 </Stack>
@@ -256,7 +422,27 @@ export default function playSudokuScreen() {
               <Grid item xs={12} lg={4}>
                 <Stack spacing={2}>
                   <Card sx={{ p: 2, textAlign: "center" }}>
-                    <Typography variant="h4">00:00</Typography>
+                    <Stack
+                      direction="row"
+                      spacing={2}
+                      justifyContent="center"
+                      alignItems="center"
+                    >
+                      <Typography variant="h4">{`${
+                        minutes < 10 ? "0" + minutes : minutes
+                      }:${seconds < 10 ? "0" + seconds : seconds}`}</Typography>
+                      <IconButton
+                        onClick={() => {
+                          if (isRunning) {
+                            pause();
+                          } else {
+                            start();
+                          }
+                        }}
+                      >
+                        <Iconify icon={isRunning ? "mdi:pause" : "mdi:play"} />
+                      </IconButton>
+                    </Stack>
                   </Card>
                   <Card sx={{ p: 2, textAlign: "center" }}>
                     <SudokuControls
@@ -264,6 +450,7 @@ export default function playSudokuScreen() {
                       settings={settings}
                       onNumberClick={handleNumberClick}
                       handleNoteClick={handleNoteClick}
+                      handlePaletteClick={handlePaletteClick}
                     />
                   </Card>
                 </Stack>
@@ -278,6 +465,7 @@ export default function playSudokuScreen() {
                       selectedCells={selectedCells}
                       highlightedNumber={highlightedNumber}
                       settings={settings}
+                      isRunning={isRunning}
                     />
                   )}
                 </Card>
