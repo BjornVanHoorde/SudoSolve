@@ -44,7 +44,7 @@ export default function playSudokuScreen() {
   const { user } = useAuthContext();
   const { themeStretch } = useSettingsContext();
   const { isMobile } = useContext(isMobileContext);
-  const { savedSudokus, sudokus, users } = useContext(dataContext);
+  const { savedSudokus, sudokus, users, userSudokus } = useContext(dataContext);
   const { sudokuId } = useRouter().query;
   const selectedSavedSudokuRef = useRef();
   const timerRef = useRef();
@@ -99,19 +99,20 @@ export default function playSudokuScreen() {
   };
 
   const handleNumberClick = (number) => {
-    if (selectedCells.length === 0) {
-      setSelectedCells([]);
-      setTimeout(() => {
-        if (highlightedNumber === number) {
-          setHighlightedNumber(null);
-        } else {
-          setHighlightedNumber(number);
-        }
-      }, 1);
-    }
+    // if (selectedCells.length > 0) {
+    //   setSelectedCells([]);
+    // }
+    setTimeout(() => {
+      if (highlightedNumber === number) {
+        setHighlightedNumber(null);
+      } else {
+        setHighlightedNumber(number);
+      }
+    }, 1);
 
     if (selectedCells.length > 0) {
       const newBoard = { ...selectedSavedSudoku.board };
+      if (!number) setHighlightedNumber(null);
       selectedCells.forEach((cell) => {
         if (newBoard[cell.row][cell.col].isGiven) return;
         newBoard[cell.row][cell.col].value = number;
@@ -174,16 +175,16 @@ export default function playSudokuScreen() {
   };
 
   const handleNoteClick = (noteNumber) => {
-    if (selectedCells.length === 0) {
-      setSelectedCells([]);
-      setTimeout(() => {
-        if (highlightedNumber === noteNumber) {
-          setHighlightedNumber(null);
-        } else {
-          setHighlightedNumber(noteNumber);
-        }
-      }, 1);
-    }
+    // if (selectedCells.length === 0) {
+    //   setSelectedCells([]);
+    // }
+    setTimeout(() => {
+      if (highlightedNumber === noteNumber) {
+        setHighlightedNumber(null);
+      } else {
+        setHighlightedNumber(noteNumber);
+      }
+    }, 1);
 
     if (selectedCells.length > 0) {
       const newBoard = { ...selectedSavedSudoku.board };
@@ -247,8 +248,12 @@ export default function playSudokuScreen() {
   // EFFECTS
   // ------------------------------------------------------------------------------------------------
   useEffect(() => {
-    if (sudokuId && sudokus && savedSudokus && !savingState) {
-      const sudoku = sudokus.find((s) => s.sudokuId === sudokuId);
+    if (sudokuId && sudokus && savedSudokus && userSudokus && !savingState) {
+      let sudoku = null;
+      sudoku = sudokus.find((s) => s.sudokuId === sudokuId);
+      if (!sudoku) {
+        sudoku = userSudokus.find((s) => s.sudokuId === sudokuId);
+      }
       const savedSudoku = savedSudokus.find(
         (s) => s.originalSudokuId === sudokuId && s.userId === user.userId
       );
@@ -273,7 +278,7 @@ export default function playSudokuScreen() {
         });
       }
     }
-  }, [sudokuId, sudokus, savedSudokus]);
+  }, [sudokuId, sudokus, savedSudokus, userSudokus]);
 
   useEffect(() => {
     if (user && users.length > 0) {
@@ -405,13 +410,16 @@ export default function playSudokuScreen() {
                     </Stack>
                   </Card>
                   <Card sx={{ p: 2, textAlign: "center" }}>
-                    <SudokuControls
-                      highlightedNumber={highlightedNumber}
-                      settings={settings}
-                      onNumberClick={handleNumberClick}
-                      handleNoteClick={handleNoteClick}
-                      handlePaletteClick={handlePaletteClick}
-                    />
+                    {selectedSavedSudoku && (
+                      <SudokuControls
+                        highlightedNumber={highlightedNumber}
+                        settings={settings}
+                        onNumberClick={handleNumberClick}
+                        handleNoteClick={handleNoteClick}
+                        handlePaletteClick={handlePaletteClick}
+                        sudoku={selectedSavedSudoku}
+                      />
+                    )}
                   </Card>
                 </Stack>
               </Grid>
@@ -445,13 +453,16 @@ export default function playSudokuScreen() {
                     </Stack>
                   </Card>
                   <Card sx={{ p: 2, textAlign: "center" }}>
-                    <SudokuControls
-                      highlightedNumber={highlightedNumber}
-                      settings={settings}
-                      onNumberClick={handleNumberClick}
-                      handleNoteClick={handleNoteClick}
-                      handlePaletteClick={handlePaletteClick}
-                    />
+                    {selectedSavedSudoku && (
+                      <SudokuControls
+                        highlightedNumber={highlightedNumber}
+                        settings={settings}
+                        onNumberClick={handleNumberClick}
+                        handleNoteClick={handleNoteClick}
+                        handlePaletteClick={handlePaletteClick}
+                        sudoku={selectedSavedSudoku}
+                      />
+                    )}
                   </Card>
                 </Stack>
               </Grid>

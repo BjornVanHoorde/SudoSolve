@@ -40,6 +40,8 @@ export default function LevelCard({
   const { enqueueSnackbar } = useSnackbar();
   const { push } = useRouter();
 
+  console.log(selectedLevel);
+
   // STATES
   // ------------------------------------------------------------------------------------------------
   const [open, setOpen] = useState(false);

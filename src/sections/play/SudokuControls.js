@@ -4,8 +4,9 @@
 // IMPORTS
 // ------------------------------------------------------------------------------------------------
 import { Box, Grid, Typography, useTheme } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Iconify from "src/components/iconify/Iconify";
+import { useHint } from "src/hooks/useHint";
 
 // GLOBALS
 // ------------------------------------------------------------------------------------------------
@@ -18,6 +19,7 @@ export default function SudokuControls({
   settings,
   handleNoteClick,
   handlePaletteClick,
+  sudoku,
 }) {
   // DATA & METHODS
   // ------------------------------------------------------------------------------------------------
@@ -47,6 +49,8 @@ export default function SudokuControls({
     userSelect: "none",
   };
 
+  const { hint } = useHint(sudoku);
+
   // FUNCTIONS
   // ------------------------------------------------------------------------------------------------
 
@@ -58,6 +62,20 @@ export default function SudokuControls({
   return (
     <Grid container spacing={2}>
       <Grid item xs={9}>
+        {selectedTab === "hint" && (
+          <>
+            <Typography align="left" variant="h4">
+              Hint
+            </Typography>
+            <Typography align="left" variant="body1">
+              {hint}
+            </Typography>
+            {/* <Typography align="left" variant="caption">
+              *If there is a wrong cell in the sudoku, the hint will may be
+              inaccurate.
+            </Typography> */}
+          </>
+        )}
         {selectedTab === "number" && (
           <Grid container spacing={1} sx={{ height: "100%" }}>
             <Grid item xs={4}>
@@ -549,7 +567,12 @@ export default function SudokuControls({
         <Box
           sx={{
             ...buttonStyle,
+            backgroundColor:
+              selectedTab === "hint"
+                ? theme.palette.primary.lighter
+                : "transparent",
           }}
+          onClick={() => setSelectedTab("hint")}
         >
           <Iconify
             icon="mdi:lightbulb-variant-outline"
@@ -578,24 +601,26 @@ export default function SudokuControls({
               />
             </Box> */}
           </Grid>
-          <Grid item xs={4}>
-            <Box
-              sx={buttonStyle}
-              onClick={() => {
-                selectedTab === "number"
-                  ? onNumberClick(0)
-                  : selectedTab === "notes"
-                  ? handleNoteClick(0)
-                  : null;
-              }}
-            >
-              <Iconify
-                icon="mdi:window-close"
-                width="90%"
-                sx={{ maxWidth: 70 }}
-              />
-            </Box>
-          </Grid>
+          {selectedTab !== "hint" && (
+            <Grid item xs={4}>
+              <Box
+                sx={buttonStyle}
+                onClick={() => {
+                  selectedTab === "number"
+                    ? onNumberClick(0)
+                    : selectedTab === "notes"
+                    ? handleNoteClick(0)
+                    : null;
+                }}
+              >
+                <Iconify
+                  icon="mdi:window-close"
+                  width="90%"
+                  sx={{ maxWidth: 70 }}
+                />
+              </Box>
+            </Grid>
+          )}
         </Grid>
       </Grid>
     </Grid>
