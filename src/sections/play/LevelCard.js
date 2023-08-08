@@ -40,8 +40,6 @@ export default function LevelCard({
   const { enqueueSnackbar } = useSnackbar();
   const { push } = useRouter();
 
-  console.log(selectedLevel);
-
   // STATES
   // ------------------------------------------------------------------------------------------------
   const [open, setOpen] = useState(false);
@@ -68,6 +66,21 @@ export default function LevelCard({
 
   const onLevelStartContinue = () => {
     if (selectedLevel) {
+      push(PATH_DASHBOARD.play.sudoku(selectedLevel.level.sudokuId));
+    }
+  };
+
+  const handleRestart = () => {
+    if (selectedSavedLevel) {
+      fb_delete_savedSudoku(selectedSavedLevel.sudokuId)
+        .then(() => {
+          push(PATH_DASHBOARD.play.sudoku(selectedLevel.level.sudokuId));
+        })
+        .catch((error) => {
+          console.log(error);
+          enqueueSnackbar("Error Restarting sudoku", { variant: "error" });
+        });
+    } else {
       push(PATH_DASHBOARD.play.sudoku(selectedLevel.level.sudokuId));
     }
   };
@@ -102,7 +115,21 @@ export default function LevelCard({
 
           <Typography align="center" variant="body1" sx={{ mb: 2 }}>
             {`Time: ${
-              selectedSavedLevel?.time ? selectedSavedLevel.time : "00:00"
+              selectedSavedLevel?.time.seconds
+                ? `${
+                    selectedSavedLevel?.time.hours
+                      ? selectedSavedLevel?.time.hours + ":"
+                      : ""
+                  }${
+                    selectedSavedLevel?.time.minutes < 10
+                      ? "0" + selectedSavedLevel?.time.minutes
+                      : selectedSavedLevel?.time.minutes
+                  }:${
+                    selectedSavedLevel?.time.seconds < 10
+                      ? "0" + selectedSavedLevel?.time.seconds
+                      : selectedSavedLevel?.time.seconds
+                  }`
+                : "00:00"
             }`}
           </Typography>
           <Stack spacing={2}>
@@ -119,6 +146,7 @@ export default function LevelCard({
                 sx={{ backgroundColor: PRIMARY.main }}
                 variant="contained"
                 fullWidth
+                onClick={handleRestart}
               >
                 Restart
               </Button>

@@ -4,7 +4,14 @@
 // IMPORTS
 // ------------------------------------------------------------------------------------------------
 import Head from "next/head";
-import { Card, Container, Dialog, Grid, Slide } from "@mui/material";
+import {
+  Card,
+  Container,
+  Dialog,
+  Grid,
+  Slide,
+  Typography,
+} from "@mui/material";
 import DashboardLayout from "src/layouts/dashboard/DashboardLayout";
 import { useSettingsContext } from "src/components/settings";
 import { useAuthContext } from "src/auth/useAuthContext";
@@ -66,7 +73,7 @@ export default function DifficultyScreen() {
 
     setSelectedSavedLevel(
       savedDifficultyLevels.find(
-        (sudoku) => sudoku.sudokuId === level.level.sudokuId
+        (sudoku) => sudoku.originalSudokuId === level.level.sudokuId
       )
     );
 
@@ -92,7 +99,10 @@ export default function DifficultyScreen() {
   useEffect(() => {
     if (savedSudokus) {
       setSavedDifficultyLevels(
-        savedSudokus.filter((sudoku) => sudoku.difficulty === difficulty) || []
+        savedSudokus.filter(
+          (sudoku) =>
+            sudoku.difficulty === difficulty && sudoku.userId === user.userId
+        ) || []
       );
     }
   }, [savedSudokus]);
@@ -126,6 +136,11 @@ export default function DifficultyScreen() {
         <Button variant="contained" onClick={handleSeed}>
           Seed
         </Button> */}
+        {difficultyLevels?.length === 0 && (
+          <Typography variant="h4" align="center">
+            🔍️ No levels found
+          </Typography>
+        )}
         <Grid container spacing={2}>
           {difficultyLevels && difficultyLevels.length > 0 && (
             <Grid item xs={12} md={8}>

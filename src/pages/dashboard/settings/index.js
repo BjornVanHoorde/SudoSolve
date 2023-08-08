@@ -22,6 +22,7 @@ import { fb_update_user } from "src/firebase/apis/users";
 import { useContext, useEffect, useState } from "react";
 import { dataContext } from "src/firebase/dataProvider";
 import ColorPresetsOptions from "src/components/settings/drawer/ColorPresetsOptions";
+import { useTheme } from "@emotion/react";
 
 // GLOBALS
 // ------------------------------------------------------------------------------------------------
@@ -37,6 +38,7 @@ export default function SettingsIndexScreen() {
   const { user } = useAuthContext();
   const { themeStretch } = useSettingsContext();
   const { users } = useContext(dataContext);
+  const theme = useTheme();
 
   // STATES
   // ------------------------------------------------------------------------------------------------

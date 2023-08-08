@@ -5,6 +5,8 @@ import {
   updateDoc,
   addDoc,
   deleteDoc,
+  query,
+  where,
 } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
@@ -21,11 +23,20 @@ export const initialStateUserSudoku = {
 };
 
 // --- SNAPSHOT --------------------------------
-export const snapshot_userSudokus = (state) => {
-  return onSnapshot(collection(firestore, "userSudokus"), (result) => {
+export const snapshot_userSudokus = (state, userId) => {
+  const q = query(
+    collection(firestore, "userSudokus"),
+    where("userId", "==", userId)
+  );
+
+  return onSnapshot(q, (result) => {
     try {
       if (result.docs.length != 0) {
         state(result.docs.map((doc) => doc.data()));
+        console.log(
+          "[apis] (userSudokus - snapshot_userSudokus) userSudokus: ",
+          result.docs.map((doc) => doc.data())
+        );
       } else {
         state([]);
       }

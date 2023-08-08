@@ -41,4 +41,7 @@ export const PATH_DASHBOARD = {
   settings: {
     root: path(ROOTS_DASHBOARD, "/settings"),
   },
+  admin: {
+    root: path(ROOTS_DASHBOARD, "/admin"),
+  },
 };

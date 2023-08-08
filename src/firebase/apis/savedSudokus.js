@@ -5,6 +5,8 @@ import {
   updateDoc,
   addDoc,
   deleteDoc,
+  query,
+  where,
 } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
@@ -28,8 +30,13 @@ export const initialStateSavedSudoku = {
 };
 
 // --- SNAPSHOT --------------------------------
-export const snapshot_savedSudokus = (state) => {
-  return onSnapshot(collection(firestore, "savedSudokus"), (result) => {
+export const snapshot_savedSudokus = (state, userId) => {
+  const q = query(
+    collection(firestore, "savedSudokus"),
+    where("userId", "==", userId)
+  );
+
+  return onSnapshot(q, (result) => {
     try {
       if (result.docs.length != 0) {
         state(result.docs.map((doc) => doc.data()));

@@ -38,6 +38,8 @@ export const PRIMARY = {
 };
 
 export const SECONDARY = {
+  lightestest: "#FDF1D4",
+  lightest: "#FCE2A7",
   lighter: "#E6C17B",
   light: "#D5AA53",
   main: "#C28F24",
@@ -56,7 +58,9 @@ export const SECONDARY = {
 // };
 
 const INFO = {
-  lighter: "#CAFDF5",
+  lightestest: "#D2F4F6",
+  lightest: "#CAFDF5",
+  lighter: "#A6E9F0",
   light: "#61F3F3",
   main: "#00B8D9",
   dark: "#006C9C",
@@ -65,7 +69,9 @@ const INFO = {
 };
 
 export const SUCCESS = {
-  lighter: "#D8FBDE",
+  lightestest: "#E3FCEF",
+  lightest: "#D8FBDE",
+  lighter: "#ABF5D1",
   light: "#86E8AB",
   main: "#36B37E",
   dark: "#1B806A",
@@ -74,7 +80,9 @@ export const SUCCESS = {
 };
 
 const WARNING = {
-  lighter: "#FFF5CC",
+  lightestest: "#FFF8CD",
+  lightest: "#FFF5CC",
+  lighter: "#FFF2B3",
   light: "#FFD666",
   main: "#FFAB00",
   dark: "#B76E00",
@@ -83,7 +91,9 @@ const WARNING = {
 };
 
 const ERROR = {
-  lighter: "#FFE9D5",
+  lightestest: "#FFE9D5",
+  lightest: "#FFE3E3",
+  lighter: "#FFD1D1",
   light: "#FFAC82",
   main: "#FF5630",
   dark: "#B71D18",

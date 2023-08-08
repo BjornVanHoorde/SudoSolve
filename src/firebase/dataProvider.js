@@ -33,7 +33,7 @@ This is the main component that is wrapped around the app. This will trigger on 
 export const DataProvider = (props) => {
   // variables
   const children = props.children;
-  const { isAuthenticated, addSubscribes } = useContext(AuthContext);
+  const { isAuthenticated, addSubscribes, user } = useContext(AuthContext);
 
   // states
   const [users, setusers] = useState([]);
@@ -50,8 +50,8 @@ export const DataProvider = (props) => {
     if (isAuthenticated) {
       snapUsers = snapshot_users(setusers);
       snapSudokus = snapshot_sudokus(setsudokus);
-      snapSavedSudokus = snapshot_savedSudokus(setsavedSudokus);
-      snapUserSudokus = snapshot_userSudokus(setuserSudokus);
+      snapSavedSudokus = snapshot_savedSudokus(setsavedSudokus, user.userId);
+      snapUserSudokus = snapshot_userSudokus(setuserSudokus, user.userId);
       return () => {
         snapUsers();
         snapSudokus();

@@ -24,10 +24,7 @@ import { PRIMARY } from "src/theme/palette";
 import { fb_uploadPicture } from "src/firebase/apis/sudokus";
 import Lottie from "lottie-react";
 import { loaderAnimation } from "src/utils/loaderAnimation";
-import {
-  transformGenerateSudoku,
-  transformSudokuTemp,
-} from "src/utils/transformGenratedSudoku";
+import { transformGenerateSudoku } from "src/utils/transformGenratedSudoku";
 import PreviewLevel from "src/sections/play/PreviewLevel";
 import { solveSudoku } from "src/utils/solveSudoku";
 import { isMobileContext } from "src/utils/isMobileProvider";
@@ -54,6 +51,7 @@ export default function ScanIndexScreen() {
   const [loading, setLoading] = useState(false);
   const [sudoku, setSudoku] = useState(null);
   const [solvedSudoku, setSolvedSudoku] = useState(null);
+  const [alertClosed, setAlertClosed] = useState(false);
 
   // VARIABLES
   // ------------------------------------------------------------------------------------------------
@@ -163,10 +161,12 @@ export default function ScanIndexScreen() {
       <Container maxWidth={themeStretch ? false : "xl"}>
         <CustomBreadcrumbs heading="Scan Sudoku" links={[]} />
 
-        <Alert severity="info">
-          Make sure the Sudoku is centered, straight and dominant in the picture
-          for the best result!
-        </Alert>
+        {!alertClosed && (
+          <Alert onClose={() => setAlertClosed(true)} severity="info">
+            Make sure the Sudoku is centered, straight and dominant in the
+            picture for the best result!
+          </Alert>
+        )}
 
         <Grid container spacing={2} sx={{ mt: 2, position: "relative" }}>
           <Grid item xs={12} md={6}>
@@ -186,7 +186,14 @@ export default function ScanIndexScreen() {
               )}
             </Card>
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid
+            item
+            xs={12}
+            md={6}
+            sx={{
+              flex: 1,
+            }}
+          >
             {file && (
               <Card sx={{ p: 2, height: "auto" }}>
                 <Stack
@@ -194,14 +201,17 @@ export default function ScanIndexScreen() {
                   justifyContent="end"
                   sx={{ height: "100%", pb: 3 }}
                 >
+                  <Typography variant="h6" gutterBottom>
+                    Sudoku
+                  </Typography>
                   {sudoku && !solvedSudoku && (
-                    <PreviewLevel level={sudoku} size={isMobile ? 26 : 55} />
+                    <PreviewLevel level={sudoku} size={isMobile ? 26 : 40} />
                   )}
 
                   {solvedSudoku && (
                     <PreviewLevel
                       level={solvedSudoku}
-                      size={isMobile ? 26 : 55}
+                      size={isMobile ? 26 : 40}
                     />
                   )}
 

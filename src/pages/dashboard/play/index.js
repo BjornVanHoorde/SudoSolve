@@ -4,7 +4,15 @@
 // IMPORTS
 // ------------------------------------------------------------------------------------------------
 import Head from "next/head";
-import { Box, Card, Container, Grid, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  Container,
+  Divider,
+  Grid,
+  Stack,
+  Typography,
+} from "@mui/material";
 import DashboardLayout from "src/layouts/dashboard/DashboardLayout";
 import { useSettingsContext } from "src/components/settings";
 import { useAuthContext } from "src/auth/useAuthContext";
@@ -53,9 +61,15 @@ export default function PlayIndexScreen() {
       <Container maxWidth={themeStretch ? false : "xl"}>
         <CustomBreadcrumbs heading="Levels" links={[]} />
 
+        <Typography variant="h5" sx={{ mb: 0.5 }}>
+          Choose a difficulty
+        </Typography>
+
         <Difficulties />
 
-        <Grid container spacing={3} sx={{ mt: isMobile ? 5 : 10 }}>
+        <Divider sx={{ mt: 5 }}>OR</Divider>
+
+        <Grid container spacing={3} sx={{ mt: 1 }}>
           <Grid item xs={12} md={6}>
             <Card
               sx={{

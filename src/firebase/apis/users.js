@@ -9,9 +9,17 @@ import {
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { FIREBASE_API } from "../../config-global";
+import {
+  deleteObject,
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
 
 const app = initializeApp(FIREBASE_API);
 const firestore = getFirestore(app);
+const storage = getStorage(app);
 
 export const initialStateUser = {
   userId: "",
@@ -29,6 +37,7 @@ export const initialStateUser = {
     HE: true,
     BA: "right",
   },
+  type: "User",
 };
 
 // --- SNAPSHOT --------------------------------
@@ -92,6 +101,46 @@ export const fb_delete_user = (id) => {
   } catch (error) {
     console.error(
       "[APIS - users] ( delete_user ) - Failed to delete user => ",
+      error
+    );
+  }
+};
+
+export const fb_upload_user_picture = async (id, pictureName, picture) => {
+  try {
+    const storageRef = ref(storage, `users/${id}/picture/${pictureName}`);
+    uploadBytesResumable(storageRef, picture)
+      .then(async (r) => {
+        const url = await getDownloadURL(r.ref);
+        return {
+          url,
+          r,
+        };
+      })
+      .then((data) => {
+        return fb_update_user(id, {
+          picture: {
+            url: data.url,
+            ref: data.r.ref.fullPath,
+            name: pictureName,
+          },
+        });
+      });
+  } catch (error) {
+    console.error(
+      "[APIS - users] ( upload_user_photo ) - Failed to upload user photo => ",
+      error
+    );
+  }
+};
+
+export const fb_delete_user_picture = async (pictureRef) => {
+  try {
+    const storageRef = ref(storage, pictureRef);
+    return deleteObject(storageRef);
+  } catch (error) {
+    console.error(
+      "[APIS - users] ( delete_user_photo ) - Failed to delete user photo => ",
       error
     );
   }

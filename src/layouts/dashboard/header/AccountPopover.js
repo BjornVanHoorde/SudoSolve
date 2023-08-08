@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 // next
 import { useRouter } from "next/router";
 // @mui
@@ -13,6 +13,7 @@ import { CustomAvatar } from "../../../components/custom-avatar";
 import { useSnackbar } from "../../../components/snackbar";
 import MenuPopover from "../../../components/menu-popover";
 import { IconButtonAnimate } from "../../../components/animate";
+import { dataContext } from "src/firebase/dataProvider";
 
 // ----------------------------------------------------------------------
 
@@ -38,9 +39,13 @@ export default function AccountPopover() {
 
   const { user, logout } = useAuthContext();
 
+  const { users } = useContext(dataContext);
+
   const { enqueueSnackbar } = useSnackbar();
 
   const [openPopover, setOpenPopover] = useState(null);
+
+  const [userSnapshot, setUserSnapshot] = useState(null);
 
   const handleOpenPopover = (event) => {
     setOpenPopover(event.currentTarget);
@@ -66,6 +71,12 @@ export default function AccountPopover() {
     push(path);
   };
 
+  useEffect(() => {
+    if (user && users) {
+      setUserSnapshot(users.find((x) => x.userId === user.userId));
+    }
+  }, [user, users]);
+
   return (
     <>
       <IconButtonAnimate
@@ -86,9 +97,9 @@ export default function AccountPopover() {
         }}
       >
         <CustomAvatar
-          src={user?.picture?.url}
-          alt={user?.username}
-          name={user?.username}
+          src={userSnapshot?.picture?.url}
+          alt={userSnapshot?.username}
+          name={userSnapshot?.username}
         />
       </IconButtonAnimate>
 
@@ -99,11 +110,11 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {user?.username}
+            {userSnapshot?.username}
           </Typography>
 
           <Typography variant="body2" sx={{ color: "text.secondary" }} noWrap>
-            {user?.email}
+            {userSnapshot?.email}
           </Typography>
         </Box>
 

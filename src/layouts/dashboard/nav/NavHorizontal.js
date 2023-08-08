@@ -1,21 +1,23 @@
-import PropTypes from 'prop-types';
-import { memo } from 'react';
+import PropTypes from "prop-types";
+import { memo } from "react";
 // @mui
-import { useTheme } from '@mui/material/styles';
-import { AppBar, Box, Toolbar } from '@mui/material';
+import { useTheme } from "@mui/material/styles";
+import { AppBar, Box, Toolbar } from "@mui/material";
 // config
-import { HEADER } from '../../../config-global';
+import { HEADER } from "../../../config-global";
 // utils
-import { bgBlur } from '../../../utils/cssStyles';
+import { bgBlur } from "../../../utils/cssStyles";
 // components
-import { NavSectionHorizontal } from '../../../components/nav-section';
+import { NavSectionHorizontal } from "../../../components/nav-section";
 //
-import navConfig from './config-navigation';
+import navConfig from "./config-navigation";
+import { useAuthContext } from "src/auth/useAuthContext";
 
 // ----------------------------------------------------------------------
 
 function NavHorizontal() {
   const theme = useTheme();
+  const { user } = useAuthContext();
 
   return (
     <AppBar
@@ -33,7 +35,20 @@ function NavHorizontal() {
           }),
         }}
       >
-        <NavSectionHorizontal data={navConfig} />
+        <NavSectionHorizontal
+          data={navConfig
+            .map((item) => {
+              if (
+                item.subheader === "Admin" &&
+                user?.userId !== "mlmmcP3QwAX4KVS1sQnas0M4Gnq1"
+              ) {
+                return null;
+              }
+
+              return item;
+            })
+            .filter((item) => item !== null)}
+        />
       </Toolbar>
 
       <Shadow />
@@ -59,9 +74,9 @@ function Shadow({ sx, ...other }) {
         height: 24,
         zIndex: -1,
         width: 1,
-        m: 'auto',
-        borderRadius: '50%',
-        position: 'absolute',
+        m: "auto",
+        borderRadius: "50%",
+        position: "absolute",
         boxShadow: (theme) => theme.customShadows.z8,
         ...sx,
       }}

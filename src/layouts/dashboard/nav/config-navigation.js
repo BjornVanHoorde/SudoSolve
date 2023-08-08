@@ -20,6 +20,7 @@ const ICONS = {
   sudoku: icon("sudoku-svgrepo-com"),
   scan: icon("camera-solid"),
   settings: icon("gear-solid"),
+  management: icon("wrench-solid"),
 };
 
 const navConfig = [
@@ -57,6 +58,16 @@ const navConfig = [
         title: "Settings",
         path: PATH_DASHBOARD.settings.root,
         icon: ICONS.settings,
+      },
+    ],
+  },
+  {
+    subheader: "Admin",
+    items: [
+      {
+        title: "Management",
+        path: PATH_DASHBOARD.admin.root,
+        icon: ICONS.management,
       },
     ],
   },

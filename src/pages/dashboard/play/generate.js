@@ -4,6 +4,7 @@
 // IMPORTS
 // ------------------------------------------------------------------------------------------------
 import {
+  Alert,
   Button,
   Card,
   Container,
@@ -57,6 +58,7 @@ export default function playGenerateScreen() {
   const [difficulty, setDifficulty] = useState();
   const [sudoku, setSudoku] = useState();
   const [open, setOpen] = useState(false);
+  const [alertClosed, setAlertClosed] = useState(false);
 
   // VARIABLES
   // ------------------------------------------------------------------------------------------------
@@ -137,24 +139,39 @@ export default function playGenerateScreen() {
           ]}
         />
 
+        {!alertClosed && (
+          <Alert
+            onClose={() => setAlertClosed(true)}
+            severity="warning"
+            sx={{ mb: 3 }}
+          >
+            <Typography variant="body2">
+              Difficult sudoku's may be unsolvable without guessing.
+            </Typography>
+          </Alert>
+        )}
+
         <Difficulties onClick={handleClick} selectedDifficulty={difficulty} />
 
-        {difficulty && !isMobile && (
+        {difficulty && !sudoku && !isMobile && (
+          <Stack
+            direction="row"
+            justifyContent="center"
+            spacing={2}
+            sx={{ mt: 5 }}
+          >
+            <Lottie
+              animationData={loaderAnimation2}
+              style={{
+                width: 150,
+                height: 150,
+              }}
+            />
+          </Stack>
+        )}
+        {difficulty && sudoku && !isMobile && (
           <Card sx={{ p: 5, mt: 3 }}>
             <Grid container spacing={3}>
-              {!sudoku && (
-                <Lottie
-                  animationData={loaderAnimation2}
-                  style={{
-                    width: 75,
-                    height: 75,
-                    position: "absolute",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                  }}
-                />
-              )}
               {sudoku && (
                 <>
                   <Grid item xs={8}>
@@ -222,6 +239,22 @@ export default function playGenerateScreen() {
             TransitionComponent={Transition}
           >
             <Card sx={{ p: 3 }}>
+              {difficulty && !sudoku && isMobile && (
+                <Stack
+                  direction="row"
+                  justifyContent="center"
+                  spacing={2}
+                  sx={{ mt: 5 }}
+                >
+                  <Lottie
+                    animationData={loaderAnimation2}
+                    style={{
+                      width: 150,
+                      height: 150,
+                    }}
+                  />
+                </Stack>
+              )}
               <Stack
                 direction="row"
                 justifyContent="space-between"

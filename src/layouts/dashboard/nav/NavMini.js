@@ -10,10 +10,13 @@ import { NavSectionMini } from "../../../components/nav-section";
 //
 import navConfig from "./config-navigation";
 import NavToggleButton from "./NavToggleButton";
+import { useAuthContext } from "src/auth/useAuthContext";
 
 // ----------------------------------------------------------------------
 
 export default function NavMini() {
+  const { user } = useAuthContext();
+
   return (
     <Box
       component="nav"
@@ -41,7 +44,20 @@ export default function NavMini() {
       >
         <Logo sx={{ mx: "auto", my: 2 }} isMini={true} />
 
-        <NavSectionMini data={navConfig} />
+        <NavSectionMini
+          data={navConfig
+            .map((item) => {
+              if (
+                item.subheader === "Admin" &&
+                user?.userId !== "mlmmcP3QwAX4KVS1sQnas0M4Gnq1"
+              ) {
+                return null;
+              }
+
+              return item;
+            })
+            .filter((item) => item !== null)}
+        />
       </Stack>
     </Box>
   );

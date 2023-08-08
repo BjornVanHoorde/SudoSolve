@@ -11,6 +11,7 @@ import {
   Grid,
   Select,
   Slide,
+  Typography,
 } from "@mui/material";
 import Head from "next/head";
 import { forwardRef, useContext, useEffect, useState } from "react";
@@ -65,7 +66,9 @@ export default function PlayMySudokusScreen() {
     setSelectedLevel(level);
 
     setSelectedSavedLevel(
-      savedSudokus.find((sudoku) => sudoku.sudokuId === level.level.sudokuId)
+      savedSudokus.find(
+        (sudoku) => sudoku.originalSudokuId === level.level.sudokuId
+      )
     );
 
     setOpen(true);
@@ -84,8 +87,13 @@ export default function PlayMySudokusScreen() {
     });
   };
 
-  const handleDifficultyClick = (difficulty) => {
-    setDifficulty(difficulty);
+  const handleDifficultyClick = (clickedDifficulty) => {
+    if (difficulty === clickedDifficulty) {
+      setDifficulty(null);
+      setSelectedLevel(null);
+      return;
+    }
+    setDifficulty(clickedDifficulty);
     setSelectedLevel(null);
   };
 
@@ -161,6 +169,18 @@ export default function PlayMySudokusScreen() {
               </option>
             ))}
           </Select>
+        )}
+
+        {sortedSudokus?.length === 0 && (
+          <Typography
+            sx={{
+              mt: 5,
+            }}
+            variant="h4"
+            align="center"
+          >
+            🔍️ No levels found
+          </Typography>
         )}
 
         <Grid container spacing={2} sx={{ mt: 2 }}>

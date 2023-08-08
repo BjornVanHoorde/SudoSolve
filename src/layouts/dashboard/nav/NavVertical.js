@@ -1,22 +1,23 @@
-import PropTypes from 'prop-types';
-import { useEffect } from 'react';
+import PropTypes from "prop-types";
+import { useEffect } from "react";
 // next
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 // @mui
-import { Box, Stack, Drawer } from '@mui/material';
+import { Box, Stack, Drawer } from "@mui/material";
 // hooks
-import useResponsive from '../../../hooks/useResponsive';
+import useResponsive from "../../../hooks/useResponsive";
 // config
-import { NAV } from '../../../config-global';
+import { NAV } from "../../../config-global";
 // components
-import Logo from '../../../components/logo';
-import Scrollbar from '../../../components/scrollbar';
-import { NavSectionVertical } from '../../../components/nav-section';
+import Logo from "../../../components/logo";
+import Scrollbar from "../../../components/scrollbar";
+import { NavSectionVertical } from "../../../components/nav-section";
 //
-import navConfig from './config-navigation';
-import NavDocs from './NavDocs';
-import NavAccount from './NavAccount';
-import NavToggleButton from './NavToggleButton';
+import navConfig from "./config-navigation";
+import NavDocs from "./NavDocs";
+import NavAccount from "./NavAccount";
+import NavToggleButton from "./NavToggleButton";
+import { useAuthContext } from "src/auth/useAuthContext";
 
 // ----------------------------------------------------------------------
 
@@ -27,8 +28,9 @@ NavVertical.propTypes = {
 
 export default function NavVertical({ openNav, onCloseNav }) {
   const { pathname } = useRouter();
+  const { user } = useAuthContext();
 
-  const isDesktop = useResponsive('up', 'lg');
+  const isDesktop = useResponsive("up", "lg");
 
   useEffect(() => {
     if (openNav) {
@@ -41,10 +43,10 @@ export default function NavVertical({ openNav, onCloseNav }) {
     <Scrollbar
       sx={{
         height: 1,
-        '& .simplebar-content': {
+        "& .simplebar-content": {
           height: 1,
-          display: 'flex',
-          flexDirection: 'column',
+          display: "flex",
+          flexDirection: "column",
         },
       }}
     >
@@ -58,13 +60,24 @@ export default function NavVertical({ openNav, onCloseNav }) {
         }}
       >
         <Logo />
-
       </Stack>
 
-      <NavSectionVertical data={navConfig} />
+      <NavSectionVertical
+        data={navConfig
+          .map((item) => {
+            if (
+              item.subheader === "Admin" &&
+              user?.userId !== "mlmmcP3QwAX4KVS1sQnas0M4Gnq1"
+            ) {
+              return null;
+            }
+
+            return item;
+          })
+          .filter((item) => item !== null)}
+      />
 
       <Box sx={{ flexGrow: 1 }} />
-
     </Scrollbar>
   );
 
@@ -86,8 +99,8 @@ export default function NavVertical({ openNav, onCloseNav }) {
             sx: {
               zIndex: 0,
               width: NAV.W_DASHBOARD,
-              bgcolor: 'transparent',
-              borderRightStyle: 'dashed',
+              bgcolor: "transparent",
+              borderRightStyle: "dashed",
             },
           }}
         >
