@@ -21,6 +21,7 @@ import { useSettingsContext } from "src/components/settings";
 import { fb_create_userSudoku } from "src/firebase/apis/userSudokus";
 import { dataContext } from "src/firebase/dataProvider";
 import DashboardLayout from "src/layouts/dashboard/DashboardLayout";
+import { useLocales } from "src/locales";
 import { PATH_DASHBOARD } from "src/routes/paths";
 import Difficulties from "src/sections/play/Difficulties";
 import LevelCard from "src/sections/play/LevelCard";
@@ -28,7 +29,6 @@ import LevelGrid from "src/sections/play/LevelGrid";
 import { difficulties } from "src/utils/constants";
 import { isMobileContext } from "src/utils/isMobileProvider";
 import { testSudoku } from "src/utils/testSudoku";
-import { date } from "yup";
 
 // GLOBALS
 // ------------------------------------------------------------------------------------------------
@@ -48,6 +48,7 @@ export default function PlayMySudokusScreen() {
   const { themeStretch } = useSettingsContext();
   const { isMobile } = useContext(isMobileContext);
   const { userSudokus, savedSudokus } = useContext(dataContext);
+  const { translate } = useLocales();
 
   // STATES
   // ------------------------------------------------------------------------------------------------
@@ -121,15 +122,15 @@ export default function PlayMySudokusScreen() {
   return (
     <>
       <Head>
-        <title>SudoSolve | My Sudokus</title>
+        <title>{`SudoSolve | ${translate("my")} Sudokus`}</title>
       </Head>
 
       <Container maxWidth={themeStretch ? false : "xl"}>
         <CustomBreadcrumbs
-          heading="My Sudokus"
+          heading={`${translate("my")} Sudokus`}
           links={[
-            { name: "Levels", href: PATH_DASHBOARD.play.root },
-            { name: "My Sudokus" },
+            { name: translate("levels"), href: PATH_DASHBOARD.play.root },
+            { name: `${translate("my")} Sudokus` },
           ]}
         />
 
@@ -148,7 +149,7 @@ export default function PlayMySudokusScreen() {
             fullWidth
             native
             value={difficulty ? difficulty.name : ""}
-            label="Difficulty"
+            label={translate("difficulty")}
             onChange={(e) => {
               const difficulty = difficulties.array.find(
                 (difficulty) => difficulty.name === e.target.value
@@ -161,11 +162,11 @@ export default function PlayMySudokusScreen() {
             }}
           >
             <option aria-label="None" value="">
-              All
+              {translate("all")}
             </option>
             {difficulties.array.map((difficulty) => (
               <option key={difficulty.name} value={difficulty.name}>
-                {difficulty.name}
+                {translate(difficulty.name)}
               </option>
             ))}
           </Select>
@@ -179,7 +180,7 @@ export default function PlayMySudokusScreen() {
             variant="h4"
             align="center"
           >
-            🔍️ No levels found
+            {`🔍️ ${translate("noLevelsFound")}`}
           </Typography>
         )}
 

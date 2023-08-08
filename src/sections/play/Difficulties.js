@@ -7,6 +7,7 @@ import { Card, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useContext, useState } from "react";
 import SvgColor from "src/components/svg-color/SvgColor";
+import { useLocales } from "src/locales";
 import { PATH_DASHBOARD } from "src/routes/paths";
 import { difficulties } from "src/utils/constants";
 import { isMobileContext } from "src/utils/isMobileProvider";
@@ -21,6 +22,7 @@ export default function Difficulties({ onClick, selectedDifficulty }) {
   // ------------------------------------------------------------------------------------------------
   const { isMobile } = useContext(isMobileContext);
   const { push } = useRouter();
+  const { translate } = useLocales();
 
   // STATES
   // ------------------------------------------------------------------------------------------------
@@ -90,7 +92,7 @@ export default function Difficulties({ onClick, selectedDifficulty }) {
               height={32}
             />
             <Typography width={isMobile ? "100%" : "auto"} variant="h6">
-              {difficulty.name}
+              {translate(difficulty.name)}
             </Typography>
           </Stack>
         </Card>

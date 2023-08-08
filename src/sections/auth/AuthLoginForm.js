@@ -15,19 +15,21 @@ import { useAuthContext } from "../../auth/useAuthContext";
 // components
 import Iconify from "../../components/iconify";
 import FormProvider, { RHFTextField } from "../../components/hook-form";
+import { useLocales } from "src/locales";
 
 // ----------------------------------------------------------------------
 
 export default function AuthLoginForm() {
   const { login } = useAuthContext();
+  const { translate } = useLocales();
 
   const [showPassword, setShowPassword] = useState(false);
 
   const LoginSchema = Yup.object().shape({
     email: Yup.string()
-      .required("Email is required")
-      .email("Email must be a valid email address"),
-    password: Yup.string().required("Password is required"),
+      .required(translate("emailIsRequired"))
+      .email(translate("emailMustBeValid")),
+    password: Yup.string().required(translate("passwordIsRequired")),
   });
 
   const defaultValues = {
@@ -67,11 +69,11 @@ export default function AuthLoginForm() {
           <Alert severity="error">{errors.afterSubmit.message}</Alert>
         )}
 
-        <RHFTextField name="email" label="Email address" />
+        <RHFTextField name="email" label={translate("emailAddress")} />
 
         <RHFTextField
           name="password"
-          label="Password"
+          label={translate("password")}
           type={showPassword ? "text" : "password"}
           InputProps={{
             endAdornment: (
@@ -91,7 +93,7 @@ export default function AuthLoginForm() {
       </Stack>
 
       <Stack alignItems="flex-end" sx={{ my: 2 }}>
-        <Link
+        {/* <Link
           component={NextLink}
           href={PATH_AUTH.resetPassword}
           variant="body2"
@@ -99,7 +101,7 @@ export default function AuthLoginForm() {
           underline="always"
         >
           Forgot password?
-        </Link>
+        </Link> */}
       </Stack>
 
       <LoadingButton
@@ -120,7 +122,7 @@ export default function AuthLoginForm() {
           },
         }}
       >
-        Login
+        {translate("login")}
       </LoadingButton>
     </FormProvider>
   );

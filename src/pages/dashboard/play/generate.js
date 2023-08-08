@@ -32,6 +32,7 @@ import { useSnackbar } from "src/components/snackbar";
 import Iconify from "src/components/iconify/Iconify";
 import { loaderAnimation2 } from "src/utils/loaderAnimation2";
 import Lottie from "lottie-react";
+import { useLocales } from "src/locales";
 
 // GLOBALS
 // ------------------------------------------------------------------------------------------------
@@ -51,6 +52,7 @@ export default function playGenerateScreen() {
   const { themeStretch } = useSettingsContext();
   const { isMobile } = useContext(isMobileContext);
   const { enqueueSnackbar } = useSnackbar();
+  const { translate } = useLocales();
 
   // STATES
   // ------------------------------------------------------------------------------------------------
@@ -106,7 +108,7 @@ export default function playGenerateScreen() {
       type: "generated",
       board: sudoku.board,
     }).then(() => {
-      enqueueSnackbar("Sudoku saved", { variant: "success" });
+      enqueueSnackbar(translate("sudokuSaved"), { variant: "success" });
       setSudoku(null);
       setDifficulty(null);
     });
@@ -126,15 +128,15 @@ export default function playGenerateScreen() {
   return (
     <>
       <Head>
-        <title>SudoSolve | Generate</title>
+        <title>{`SudoSolve | ${translate("generate")}`}</title>
       </Head>
 
       <Container maxWidth={themeStretch ? false : "xl"}>
         <CustomBreadcrumbs
-          heading="Generate Sudoku"
+          heading={`${translate("generate")} Sudoku`}
           links={[
-            { name: "Levels", href: PATH_DASHBOARD.play.root },
-            { name: "Generate Sudoku" },
+            { name: translate("levels"), href: PATH_DASHBOARD.play.root },
+            { name: `${translate("generate")} Sudoku` },
           ]}
         />
 
@@ -145,7 +147,7 @@ export default function playGenerateScreen() {
             sx={{ mb: 3 }}
           >
             <Typography variant="body2">
-              Difficult sudoku's may be unsolvable without guessing.
+              {translate("difficultSudokusMayBeUnsolvableWithoutGuessing")}
             </Typography>
           </Alert>
         )}
@@ -207,7 +209,7 @@ export default function playGenerateScreen() {
                         }}
                         onClick={handleSave}
                       >
-                        Save for later
+                        {translate("saveForLater")}
                       </Button>
                       <Button
                         variant="outlined"
@@ -221,7 +223,7 @@ export default function playGenerateScreen() {
                         }}
                         onClick={() => handleClick(difficulty)}
                       >
-                        Generate again
+                        {translate("generateAgain")}
                       </Button>
                     </Stack>
                   </Grid>
@@ -260,7 +262,9 @@ export default function playGenerateScreen() {
                 alignItems="center"
                 sx={{ mb: 2 }}
               >
-                <Typography variant="h5">{difficulty.name}</Typography>
+                <Typography variant="h5">
+                  {translate(difficulty.name)}
+                </Typography>
                 <IconButton
                   onClick={handleClose}
                   color="error"
@@ -310,7 +314,7 @@ export default function playGenerateScreen() {
                           }}
                           onClick={handleSave}
                         >
-                          Save for later
+                          {translate("saveForLater")}
                         </Button>
                         <Button
                           variant="outlined"
@@ -324,7 +328,7 @@ export default function playGenerateScreen() {
                           }}
                           onClick={() => handleClick(difficulty)}
                         >
-                          Generate again
+                          {translate("generateAgain")}
                         </Button>
                       </Stack>
                     </Grid>

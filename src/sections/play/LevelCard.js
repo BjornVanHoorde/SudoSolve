@@ -1,6 +1,8 @@
 // INFO
 // ------------------------------------------------------------------------------------------------
 
+// IMPORTS
+// ------------------------------------------------------------------------------------------------
 import {
   Button,
   Card,
@@ -20,9 +22,7 @@ import ConfirmDialog from "src/components/confirm-dialog/ConfirmDialog";
 import { fb_delete_savedSudoku } from "src/firebase/apis/savedSudokus";
 import { useRouter } from "next/router";
 import { PATH_DASHBOARD } from "src/routes/paths";
-
-// IMPORTS
-// ------------------------------------------------------------------------------------------------
+import { useLocales } from "src/locales";
 
 // GLOBALS
 // ------------------------------------------------------------------------------------------------
@@ -39,6 +39,7 @@ export default function LevelCard({
   // ------------------------------------------------------------------------------------------------
   const { enqueueSnackbar } = useSnackbar();
   const { push } = useRouter();
+  const { translate } = useLocales();
 
   // STATES
   // ------------------------------------------------------------------------------------------------
@@ -56,11 +57,11 @@ export default function LevelCard({
     await fb_delete_userSudoku(selectedLevel.level.sudokuId)
       .then(() => {
         onLevelClose();
-        enqueueSnackbar("Sudoku deleted", { variant: "success" });
+        enqueueSnackbar(translate("sudokuDeleted"), { variant: "success" });
       })
       .catch((error) => {
         console.log(error);
-        enqueueSnackbar("Error deleting sudoku", { variant: "error" });
+        enqueueSnackbar(translate("errorDeletingSudoku"), { variant: "error" });
       });
   };
 
@@ -78,7 +79,9 @@ export default function LevelCard({
         })
         .catch((error) => {
           console.log(error);
-          enqueueSnackbar("Error Restarting sudoku", { variant: "error" });
+          enqueueSnackbar(translate("errorRestaringSudoku"), {
+            variant: "error",
+          });
         });
     } else {
       push(PATH_DASHBOARD.play.sudoku(selectedLevel.level.sudokuId));
@@ -105,16 +108,16 @@ export default function LevelCard({
           </Stack>
           <Typography textAlign="center" variant="h6" sx={{ mb: 2 }}>
             {selectedLevel.level.difficulty
-              ? `${difficulties[selectedLevel.level.difficulty].name} - Level ${
-                  selectedLevel.index
-                }`
-              : "My sudokus - Level " + selectedLevel.index}
+              ? `${translate(
+                  difficulties[selectedLevel.level.difficulty].name
+                )} - ${translate("level")} ${selectedLevel.index}`
+              : translate("my") + " sudokus - Level " + selectedLevel.index}
           </Typography>
 
           <PreviewLevel level={selectedLevel.level} />
 
           <Typography align="center" variant="body1" sx={{ mb: 2 }}>
-            {`Time: ${
+            {`${translate("time")}: ${
               selectedSavedLevel?.time.seconds ||
               selectedSavedLevel?.time.minutes
                 ? `${
@@ -140,7 +143,7 @@ export default function LevelCard({
               fullWidth
               onClick={onLevelStartContinue}
             >
-              {selectedSavedLevel ? "Continue" : "Start"}
+              {selectedSavedLevel ? translate("continue") : translate("start")}
             </Button>
             {selectedSavedLevel && (
               <Button
@@ -149,7 +152,7 @@ export default function LevelCard({
                 fullWidth
                 onClick={handleRestart}
               >
-                Restart
+                {translate("restart")}
               </Button>
             )}
             {isUserSudoku && (
@@ -159,7 +162,7 @@ export default function LevelCard({
                 variant="contained"
                 fullWidth
               >
-                Delete
+                {translate("delete")}
               </Button>
             )}
           </Stack>
@@ -169,11 +172,11 @@ export default function LevelCard({
       <ConfirmDialog
         open={open}
         onClose={() => setOpen(false)}
-        title="Delete sudoku"
-        content="Are you sure you want to delete this sudoku?"
+        title={translate("deleteSudoku")}
+        content={translate("areYouSureYouWantToDeleteThisSudoku")}
         action={
           <Button onClick={handleDelete} color="error" variant="contained">
-            Delete
+            {translate("delete")}
           </Button>
         }
       />

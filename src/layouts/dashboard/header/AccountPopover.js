@@ -14,6 +14,7 @@ import { useSnackbar } from "../../../components/snackbar";
 import MenuPopover from "../../../components/menu-popover";
 import { IconButtonAnimate } from "../../../components/animate";
 import { dataContext } from "src/firebase/dataProvider";
+import { useLocales } from "src/locales";
 
 // ----------------------------------------------------------------------
 
@@ -23,11 +24,11 @@ const OPTIONS = [
     linkTo: PATH_DASHBOARD.home,
   },
   {
-    label: "Account",
+    label: "account",
     linkTo: PATH_DASHBOARD.account.root,
   },
   {
-    label: "Settings",
+    label: "settings",
     linkTo: PATH_DASHBOARD.settings.root,
   },
 ];
@@ -36,6 +37,8 @@ const OPTIONS = [
 
 export default function AccountPopover() {
   const { replace, push } = useRouter();
+
+  const { translate } = useLocales();
 
   const { user, logout } = useAuthContext();
 
@@ -126,7 +129,7 @@ export default function AccountPopover() {
               key={option.label}
               onClick={() => handleClickItem(option.linkTo)}
             >
-              {option.label}
+              {translate(option.label)}
             </MenuItem>
           ))}
         </Stack>
@@ -134,7 +137,7 @@ export default function AccountPopover() {
         <Divider sx={{ borderStyle: "dashed" }} />
 
         <MenuItem onClick={handleLogout} sx={{ m: 1 }}>
-          Logout
+          {translate("logout")}
         </MenuItem>
       </MenuPopover>
     </>

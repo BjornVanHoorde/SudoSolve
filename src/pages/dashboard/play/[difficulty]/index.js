@@ -27,6 +27,7 @@ import { fb_create_sudoku } from "src/firebase/apis/sudokus";
 import { testSudoku } from "src/utils/testSudoku";
 import { dataContext } from "src/firebase/dataProvider";
 import LevelCard from "src/sections/play/LevelCard";
+import { useLocales } from "src/locales";
 
 // GLOBALS
 // ------------------------------------------------------------------------------------------------
@@ -47,6 +48,7 @@ export default function DifficultyScreen() {
   const { isMobile } = useContext(isMobileContext);
   const { difficulty } = useRouter().query;
   const { sudokus, savedSudokus } = useContext(dataContext);
+  const { translate } = useLocales();
 
   // STATES
   // ------------------------------------------------------------------------------------------------
@@ -113,7 +115,7 @@ export default function DifficultyScreen() {
     <>
       <Head>
         <title>{`SudoSolve | ${
-          difficulty ? difficulties[difficulty].name : ""
+          difficulty ? translate(difficulties[difficulty].name) : ""
         }`}</title>
       </Head>
 
@@ -126,10 +128,12 @@ export default function DifficultyScreen() {
               color={difficulty ? difficulties[difficulty].color : ""}
             />
           }
-          heading={difficulty ? difficulties[difficulty].name : ""}
+          heading={difficulty ? translate(difficulties[difficulty].name) : ""}
           links={[
-            { name: "Levels", href: PATH_DASHBOARD.play.root },
-            { name: difficulty ? difficulties[difficulty].name : "" },
+            { name: translate("levels"), href: PATH_DASHBOARD.play.root },
+            {
+              name: difficulty ? translate(difficulties[difficulty].name) : "",
+            },
           ]}
         />
         {/* 
@@ -138,7 +142,7 @@ export default function DifficultyScreen() {
         </Button> */}
         {difficultyLevels?.length === 0 && (
           <Typography variant="h4" align="center">
-            🔍️ No levels found
+            {`🔍️ ${translate("noLevelsFound")}`}
           </Typography>
         )}
         <Grid container spacing={2}>

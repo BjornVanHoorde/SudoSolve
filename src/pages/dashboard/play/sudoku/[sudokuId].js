@@ -39,6 +39,7 @@ import { isSolved } from "src/utils/isSolved";
 import { isSolvedAnimation } from "src/utils/isSolvedAnimation";
 import Lottie from "lottie-react";
 import { PATH_DASHBOARD } from "src/routes/paths";
+import { useLocales } from "src/locales";
 
 // GLOBALS
 // ------------------------------------------------------------------------------------------------
@@ -59,6 +60,7 @@ export default function playSudokuScreen() {
   const selectedSavedSudokuRef = useRef();
   const timerRef = useRef();
   const { push } = useRouter();
+  const { translate } = useLocales();
 
   // STATES
   // ------------------------------------------------------------------------------------------------
@@ -433,15 +435,15 @@ export default function playSudokuScreen() {
             aria-describedby="alert-dialog-description"
           >
             <DialogTitle id="alert-dialog-title">
-              {"Congratulations!"}
+              {translate("congratulations")}
             </DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
-                You have solved the sudoku!
+                {translate("youHaveSolvedTheSudoku")}
               </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleBackClick}>Go back</Button>
+              <Button onClick={handleBackClick}>{translate("goback")}</Button>
             </DialogActions>
           </Dialog>
         </>

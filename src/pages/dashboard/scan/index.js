@@ -30,6 +30,7 @@ import { solveSudoku } from "src/utils/solveSudoku";
 import { isMobileContext } from "src/utils/isMobileProvider";
 import { fb_create_userSudoku } from "src/firebase/apis/userSudokus";
 import { getDifficulty } from "src/utils/getDifficulty";
+import { useLocales } from "src/locales";
 
 // GLOBALS
 // ------------------------------------------------------------------------------------------------
@@ -44,6 +45,7 @@ export default function ScanIndexScreen() {
   const { themeStretch } = useSettingsContext();
   const { enqueueSnackbar } = useSnackbar();
   const { isMobile } = useContext(isMobileContext);
+  const { translate } = useLocales();
 
   // STATES
   // ------------------------------------------------------------------------------------------------
@@ -61,7 +63,7 @@ export default function ScanIndexScreen() {
   const handleDrop = (acceptedFiles) => {
     // check if file is image
     if (!acceptedFiles[0].type.startsWith("image/")) {
-      enqueueSnackbar("File is not an image", { variant: "error" });
+      enqueueSnackbar(translate("fileIsNotAnImage"), { variant: "error" });
       return;
     }
     setFile(acceptedFiles[0]);
@@ -139,7 +141,7 @@ export default function ScanIndexScreen() {
       type: "scanned",
       difficulty,
     }).then(() => {
-      enqueueSnackbar("Sudoku saved!", { variant: "success" });
+      enqueueSnackbar(translate("sudokuSaved"), { variant: "success" });
     });
   };
 
@@ -163,8 +165,7 @@ export default function ScanIndexScreen() {
 
         {!alertClosed && (
           <Alert onClose={() => setAlertClosed(true)} severity="info">
-            Make sure the Sudoku is centered, straight and dominant in the
-            picture for the best result!
+            {translate("makeSureTheSudokuIsCenteredEtc")}
           </Alert>
         )}
 
@@ -172,7 +173,7 @@ export default function ScanIndexScreen() {
           <Grid item xs={12} md={6}>
             <Card sx={{ p: 2 }}>
               <Typography variant="h6" gutterBottom>
-                Upload
+                {translate("upload")}
               </Typography>
               {!file && (
                 <Upload onDrop={handleDrop} onRemove={handleRemoveFile} />
@@ -243,7 +244,7 @@ export default function ScanIndexScreen() {
                         }}
                         onClick={handleRemoveFile}
                       >
-                        Retry picture
+                        {translate("retryPicture")}
                       </Button>
                     </>
                   )}
@@ -275,7 +276,7 @@ export default function ScanIndexScreen() {
                         }}
                         onClick={handleSave}
                       >
-                        Save for later
+                        {translate("saveForLater")}
                       </Button>
                       <Button
                         variant="outlined"
@@ -289,7 +290,7 @@ export default function ScanIndexScreen() {
                         }}
                         onClick={handleSolve}
                       >
-                        Solve
+                        {translate("solve")}
                       </Button>
                       <Button
                         variant="outlined"
@@ -303,7 +304,7 @@ export default function ScanIndexScreen() {
                         }}
                         onClick={handleRemoveFile}
                       >
-                        Retry picture
+                        {translate("retryPicture")}
                       </Button>
                     </>
                   )}
@@ -317,7 +318,7 @@ export default function ScanIndexScreen() {
                           mt: 5,
                         }}
                       >
-                        Scanning...
+                        {translate("scanning")}
                       </Typography>
                       <Typography
                         variant="h6"
@@ -327,7 +328,7 @@ export default function ScanIndexScreen() {
                           mt: 5,
                         }}
                       >
-                        This may take some time
+                        {translate("thisMayTakeSomeTime")}
                       </Typography>
                     </>
                   )}

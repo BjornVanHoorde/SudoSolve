@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { useLocales } from "src/locales";
 
 const simplifySudoku = (sudoku) => {
   let simpleSudoku = [];
@@ -303,9 +304,9 @@ const getHiddenSingle = (notes) => {
   return hiddenSingle;
 };
 
-const generateHint = (type, props, answer) => {
+const generateHint = (t, type, props, answer) => {
   if (type === "lastEmptyCell") {
-    return `Last empty cell in ${
+    return `${t("lastEmptyCellIn")} ${
       props.lastEmptyCell.type === "row"
         ? "R"
         : props.lastEmptyCell.type === "column"
@@ -317,29 +318,32 @@ const generateHint = (type, props, answer) => {
         : props.lastEmptyCell.type === "column"
         ? props.lastEmptyCell.cell[3]
         : props.lastEmptyCell.box
-    } is ${answer}`;
+    } ${t("is")} ${answer}`;
   }
 
   if (type === "nakedSingle") {
-    return `Naked single in ${props.nakedSingle.cell} is ${props.nakedSingle.value}`;
+    return `${t("nakedSingleIn")} ${props.nakedSingle.cell} ${t("is")} ${
+      props.nakedSingle.value
+    }`;
   }
 
   if (type === "hiddenSingle") {
-    return `Hidden single in ${props.hiddenSingle.cell} in ${
+    return `${t("hiddenSingleIn")} ${props.hiddenSingle.cell} ${t("in")} ${
       props.hiddenSingle.row
         ? `R${props.hiddenSingle.row}`
         : props.hiddenSingle.column
         ? `C${props.hiddenSingle.column}`
         : `box${props.hiddenSingle.box}`
-    } is ${props.hiddenSingle.value}`;
+    } ${t("is")} ${props.hiddenSingle.value}`;
   }
 };
 
 export const useHint = (sudoku) => {
-  const [hint, setHint] = useState("No hint available");
+  const { translate } = useLocales();
+  const [hint, setHint] = useState(translate("noHintAvailable"));
 
   useEffect(() => {
-    setHint("No hint available");
+    setHint(translate("noHintAvailable"));
 
     const simpleSudoku = simplifySudoku(sudoku.board);
 
@@ -349,7 +353,9 @@ export const useHint = (sudoku) => {
       // console.log(lastEmptyCell);
       const answer = solveLastEmptyCell(simpleSudoku, lastEmptyCell);
       if (answer) {
-        setHint(generateHint("lastEmptyCell", { lastEmptyCell }, answer));
+        setHint(
+          generateHint(translate, "lastEmptyCell", { lastEmptyCell }, answer)
+        );
       }
       return;
     }
@@ -360,14 +366,14 @@ export const useHint = (sudoku) => {
     // Naked single method
     const nakedSingle = getNakedSingle(notes);
     if (nakedSingle) {
-      setHint(generateHint("nakedSingle", { nakedSingle }));
+      setHint(generateHint(translate, "nakedSingle", { nakedSingle }));
       return;
     }
 
     // Hidden single method
     const hiddenSingle = getHiddenSingle(notes);
     if (hiddenSingle) {
-      setHint(generateHint("hiddenSingle", { hiddenSingle }));
+      setHint(generateHint(translate, "hiddenSingle", { hiddenSingle }));
       return;
     }
 

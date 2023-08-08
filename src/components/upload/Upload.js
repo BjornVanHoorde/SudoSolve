@@ -12,6 +12,7 @@ import RejectionFiles from "./errors/RejectionFiles";
 import MultiFilePreview from "./preview/MultiFilePreview";
 import SingleFilePreview from "./preview/SingleFilePreview";
 import { PRIMARY } from "src/theme/palette";
+import { useLocales } from "src/locales";
 
 // ----------------------------------------------------------------------
 
@@ -75,6 +76,7 @@ export default function Upload({
     disabled,
     ...other,
   });
+  const { translate } = useLocales();
 
   const hasFile = !!file && !multiple;
 
@@ -183,6 +185,8 @@ Placeholder.propTypes = {
 };
 
 function Placeholder({ sx, ...other }) {
+  const { translate } = useLocales();
+
   return (
     <Stack
       spacing={5}
@@ -208,11 +212,11 @@ function Placeholder({ sx, ...other }) {
 
       <div>
         <Typography gutterBottom variant="h5">
-          Select Sudoku
+          {translate("selectSudoku")}
         </Typography>
 
         <Typography variant="body2" sx={{ color: "text.secondary" }}>
-          Drop files here or click
+          {translate("dropFilesHereOrClick")}
           <Typography
             variant="body2"
             component="span"
@@ -222,9 +226,9 @@ function Placeholder({ sx, ...other }) {
               textDecoration: "underline",
             }}
           >
-            browse
+            {translate("browse")}
           </Typography>
-          thorough your machine
+          {translate("thoroughYourMachine")}
         </Typography>
       </div>
     </Stack>

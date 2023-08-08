@@ -23,6 +23,7 @@ import { useContext, useEffect, useState } from "react";
 import { dataContext } from "src/firebase/dataProvider";
 import ColorPresetsOptions from "src/components/settings/drawer/ColorPresetsOptions";
 import { useTheme } from "@emotion/react";
+import { useLocales } from "src/locales";
 
 // GLOBALS
 // ------------------------------------------------------------------------------------------------
@@ -39,6 +40,7 @@ export default function SettingsIndexScreen() {
   const { themeStretch } = useSettingsContext();
   const { users } = useContext(dataContext);
   const theme = useTheme();
+  const { onChangeLang, currentLang, allLangs, translate } = useLocales();
 
   // STATES
   // ------------------------------------------------------------------------------------------------
@@ -74,17 +76,17 @@ export default function SettingsIndexScreen() {
   return (
     <>
       <Head>
-        <title>SudoSolve | Settings</title>
+        <title>{"SudoSolve | " + translate("settings")}</title>
       </Head>
 
       <Container maxWidth={themeStretch ? false : "xl"}>
-        <CustomBreadcrumbs heading="Settings" links={[]} />
+        <CustomBreadcrumbs heading={translate("settings")} links={[]} />
 
         {snapshotUser && (
           <Grid container spacing={3}>
             <Grid item xs={12} md={8}>
               <Card sx={{ p: 3 }}>
-                <Typography variant="h6">Gameplay</Typography>
+                <Typography variant="h6">{translate("gameplay")}</Typography>
                 <Stack spacing={3} sx={{ mt: 2 }}>
                   <Stack
                     direction="row"
@@ -92,13 +94,18 @@ export default function SettingsIndexScreen() {
                     justifyContent="space-between"
                     spacing={2}
                   >
-                    <Typography variant="body1">Board alignment</Typography>
+                    <Typography variant="body1">
+                      {translate("language")}
+                    </Typography>
                     <Select
-                      value={snapshotUser.settings.BA}
-                      onChange={(e) => handleChange(e, "BA")}
+                      value={currentLang.value}
+                      onChange={(e) => onChangeLang(e.target.value)}
                     >
-                      <MenuItem value="left">Left</MenuItem>
-                      <MenuItem value="right">Right</MenuItem>
+                      {allLangs.map((lang) => (
+                        <MenuItem key={lang.value} value={lang.value}>
+                          {lang.label}
+                        </MenuItem>
+                      ))}
                     </Select>
                   </Stack>
                   <Stack
@@ -108,7 +115,24 @@ export default function SettingsIndexScreen() {
                     spacing={2}
                   >
                     <Typography variant="body1">
-                      Auto remove restricted notes
+                      {translate("boardAlignment")}
+                    </Typography>
+                    <Select
+                      value={snapshotUser.settings.BA}
+                      onChange={(e) => handleChange(e, "BA")}
+                    >
+                      <MenuItem value="left">{translate("left")}</MenuItem>
+                      <MenuItem value="right">{translate("right")}</MenuItem>
+                    </Select>
+                  </Stack>
+                  <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    spacing={2}
+                  >
+                    <Typography variant="body1">
+                      {translate("autoRemoveRestrictedNotes")}
                     </Typography>
                     <Switch
                       checked={snapshotUser.settings.ARRN}
@@ -122,7 +146,7 @@ export default function SettingsIndexScreen() {
                     spacing={2}
                   >
                     <Typography variant="body1">
-                      Highlight matching numbers
+                      {translate("highlightMatchingNumbers")}
                     </Typography>
                     <Switch
                       checked={snapshotUser.settings.HMN}
@@ -136,7 +160,7 @@ export default function SettingsIndexScreen() {
                     spacing={2}
                   >
                     <Typography variant="body1">
-                      Hightlight restricted cells
+                      {translate("highlightRestrictedCells")}
                     </Typography>
                     <Switch
                       checked={snapshotUser.settings.HRC}
@@ -149,7 +173,9 @@ export default function SettingsIndexScreen() {
                     justifyContent="space-between"
                     spacing={2}
                   >
-                    <Typography variant="body1">Highlight errors</Typography>
+                    <Typography variant="body1">
+                      {translate("highlightErrors")}
+                    </Typography>
                     <Switch
                       checked={snapshotUser.settings.HE}
                       onChange={(e) => handleChange(e, "HE")}
@@ -160,7 +186,7 @@ export default function SettingsIndexScreen() {
             </Grid>
             <Grid item xs={12} md={4}>
               <Card sx={{ p: 3 }}>
-                <Typography variant="h6">Themes</Typography>
+                <Typography variant="h6">{translate("themes")}</Typography>
                 <ColorPresetsOptions />
               </Card>
             </Grid>

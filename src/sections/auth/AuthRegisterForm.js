@@ -11,20 +11,22 @@ import { useAuthContext } from "../../auth/useAuthContext";
 // components
 import Iconify from "../../components/iconify";
 import FormProvider, { RHFTextField } from "../../components/hook-form";
+import { useLocales } from "src/locales";
 
 // ----------------------------------------------------------------------
 
 export default function AuthRegisterForm() {
   const { register } = useAuthContext();
+  const { translate } = useLocales();
 
   const [showPassword, setShowPassword] = useState(false);
 
   const RegisterSchema = Yup.object().shape({
-    username: Yup.string().required("Username required"),
+    username: Yup.string().required(translate("usernameIsRequired")),
     email: Yup.string()
-      .required("Email is required")
-      .email("Email must be a valid email address"),
-    password: Yup.string().required("Password is required"),
+      .required(translate("emailIsRequired"))
+      .email(translate("emailMustBeValid")),
+    password: Yup.string().required(translate("passwordIsRequired")),
   });
 
   const defaultValues = {
@@ -69,13 +71,13 @@ export default function AuthRegisterForm() {
           <Alert severity="error">{errors.afterSubmit.message}</Alert>
         )}
 
-        <RHFTextField name="username" label="Username" />
+        <RHFTextField name="username" label={translate("username")} />
 
-        <RHFTextField name="email" label="Email address" />
+        <RHFTextField name="email" label={translate("emailAddress")} />
 
         <RHFTextField
           name="password"
-          label="Password"
+          label={translate("password")}
           type={showPassword ? "text" : "password"}
           InputProps={{
             endAdornment: (
@@ -111,7 +113,7 @@ export default function AuthRegisterForm() {
             },
           }}
         >
-          Create account
+          {translate("createAccount")}
         </LoadingButton>
       </Stack>
     </FormProvider>

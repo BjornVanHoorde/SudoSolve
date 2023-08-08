@@ -26,6 +26,7 @@ import {
 import { PRIMARY } from "src/theme/palette";
 import { useSnackbar } from "src/components/snackbar";
 import { dataContext } from "src/firebase/dataProvider";
+import { useLocales } from "src/locales";
 
 // GLOBALS
 // ------------------------------------------------------------------------------------------------
@@ -42,6 +43,7 @@ export default function AccountIndexScreen() {
   const { themeStretch } = useSettingsContext();
   const { enqueueSnackbar } = useSnackbar();
   const { users } = useContext(dataContext);
+  const { translate } = useLocales();
 
   // STATES
   // ------------------------------------------------------------------------------------------------
@@ -139,11 +141,11 @@ export default function AccountIndexScreen() {
   return (
     <>
       <Head>
-        <title>SudoSolve | Account</title>
+        <title>{`SudoSolve | ${translate("account")}`}</title>
       </Head>
 
       <Container maxWidth={themeStretch ? false : "xl"}>
-        <CustomBreadcrumbs heading="Account" links={[]} />
+        <CustomBreadcrumbs heading={translate("account")} links={[]} />
 
         <Card sx={{ p: 5 }}>
           <Grid container spacing={2}>
@@ -166,7 +168,7 @@ export default function AccountIndexScreen() {
                     color="error"
                     onClick={handlePictureRemove}
                   >
-                    Delete avatar
+                    {translate("deleteAvatar")}
                   </Button>
                 </Stack>
               ) : (
@@ -200,7 +202,7 @@ export default function AccountIndexScreen() {
                 },
               }}
             >
-              Save
+              {translate("save")}
             </Button>
           </Stack>
         </Card>

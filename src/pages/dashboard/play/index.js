@@ -23,6 +23,7 @@ import { PATH_DASHBOARD } from "src/routes/paths";
 import { useContext } from "react";
 import { isMobileContext } from "src/utils/isMobileProvider";
 import { useRouter } from "next/router";
+import { useLocales } from "src/locales";
 
 // GLOBALS
 // ------------------------------------------------------------------------------------------------
@@ -37,6 +38,7 @@ export default function PlayIndexScreen() {
   const { themeStretch } = useSettingsContext();
   const { isMobile } = useContext(isMobileContext);
   const { push } = useRouter();
+  const { translate } = useLocales();
 
   // STATES
   // ------------------------------------------------------------------------------------------------
@@ -59,15 +61,15 @@ export default function PlayIndexScreen() {
       </Head>
 
       <Container maxWidth={themeStretch ? false : "xl"}>
-        <CustomBreadcrumbs heading="Levels" links={[]} />
+        <CustomBreadcrumbs heading={translate("levels")} links={[]} />
 
         <Typography variant="h5" sx={{ mb: 0.5 }}>
-          Choose a difficulty
+          {translate("chooseADifficulty")}
         </Typography>
 
         <Difficulties />
 
-        <Divider sx={{ mt: 5 }}>OR</Divider>
+        <Divider sx={{ mt: 5 }}>{translate("or").toUpperCase()}</Divider>
 
         <Grid container spacing={3} sx={{ mt: 1 }}>
           <Grid item xs={12} md={6}>
@@ -92,7 +94,7 @@ export default function PlayIndexScreen() {
               <Stack direction="row" spacing={2} justifyContent="space-between">
                 <Box>
                   <Typography variant="h2" gutterBottom>
-                    My
+                    {translate("my")}
                   </Typography>
                   <Typography variant="h2" gutterBottom>
                     Sudokus
@@ -135,7 +137,7 @@ export default function PlayIndexScreen() {
               <Stack direction="row" spacing={2} justifyContent="space-between">
                 <Box>
                   <Typography variant="h2" gutterBottom>
-                    Generate
+                    {translate("generate")}
                   </Typography>
                   <Typography variant="h2" gutterBottom>
                     Sudoku

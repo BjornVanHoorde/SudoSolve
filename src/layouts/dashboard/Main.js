@@ -52,6 +52,7 @@ export default function Main({ children, sx, ...other }) {
         flexGrow: 1,
 
         pt: `${HEADER.H_MOBILE + SPACING}px`,
+        pb: `6px`,
         ...(isDesktop && {
           px: 2,
           pt: `85px`,

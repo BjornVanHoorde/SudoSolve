@@ -13,6 +13,7 @@ import { useRouter } from "next/router";
 import { PATH_DASHBOARD } from "src/routes/paths";
 import { isMobileContext } from "src/utils/isMobileProvider";
 import { useContext } from "react";
+import { useLocales } from "src/locales";
 
 // GLOBALS
 // ------------------------------------------------------------------------------------------------
@@ -27,6 +28,7 @@ export default function GeneralAppPage() {
   const { themeStretch } = useSettingsContext();
   const { push } = useRouter();
   const { isMobile } = useContext(isMobileContext);
+  const { translate } = useLocales();
 
   // STATES
   // ------------------------------------------------------------------------------------------------
@@ -150,7 +152,7 @@ export default function GeneralAppPage() {
                   justifyContent="space-between"
                 >
                   <Typography variant="h2" gutterBottom>
-                    THEMES
+                    {translate("themes").toUpperCase()}
                   </Typography>
                   <Box sx={{ overflow: "hidden" }}>
                     <img
@@ -190,7 +192,7 @@ export default function GeneralAppPage() {
                   justifyContent="space-between"
                 >
                   <Typography variant="h2" gutterBottom>
-                    SETTINGS
+                    {translate("settings").toUpperCase()}
                   </Typography>
                   <Box sx={{ overflow: "hidden" }}>
                     <img

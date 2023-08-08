@@ -5,6 +5,7 @@
 // ------------------------------------------------------------------------------------------------
 import { Box, Card, Grid, Typography, useTheme } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
+import { useLocales } from "src/locales";
 import { isMobileContext } from "src/utils/isMobileProvider";
 
 // GLOBALS
@@ -26,6 +27,7 @@ export default function Sudoku({
   // ------------------------------------------------------------------------------------------------
   const theme = useTheme();
   const { isMobile } = useContext(isMobileContext);
+  const { translate } = useLocales();
 
   // STATES
   // ------------------------------------------------------------------------------------------------
@@ -89,7 +91,7 @@ export default function Sudoku({
               userSelect: "none",
             }}
           >
-            PAUSED
+            {translate("paused").toUpperCase()}
           </Typography>
           <Typography
             variant="h3"
@@ -98,7 +100,7 @@ export default function Sudoku({
               userSelect: "none",
             }}
           >
-            No peeking! 🙈
+            {`${translate("noPeeking")} 🙈`}
           </Typography>
         </>
       )}
@@ -111,7 +113,7 @@ export default function Sudoku({
               userSelect: "none",
             }}
           >
-            PAUSED
+            {translate("paused").toUpperCase()}
           </Typography>
           <Typography
             variant="h3"
@@ -120,7 +122,7 @@ export default function Sudoku({
               userSelect: "none",
             }}
           >
-            No peeking! 🙈
+            {`${translate("noPeeking")} 🙈`}
           </Typography>
         </Card>
       )}
