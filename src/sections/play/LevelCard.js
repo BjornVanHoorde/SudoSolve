@@ -115,7 +115,8 @@ export default function LevelCard({
 
           <Typography align="center" variant="body1" sx={{ mb: 2 }}>
             {`Time: ${
-              selectedSavedLevel?.time.seconds
+              selectedSavedLevel?.time.seconds ||
+              selectedSavedLevel?.time.minutes
                 ? `${
                     selectedSavedLevel?.time.hours
                       ? selectedSavedLevel?.time.hours + ":"

@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 // @mui
 import { Box } from "@mui/material";
 // hooks
@@ -14,6 +14,8 @@ import Header from "./header";
 import NavMini from "./nav/NavMini";
 import NavVertical from "./nav/NavVertical";
 import NavHorizontal from "./nav/NavHorizontal";
+import { isMobileContext } from "src/utils/isMobileProvider";
+import { useRouter } from "next/router";
 
 // ----------------------------------------------------------------------
 
@@ -32,6 +34,40 @@ export default function DashboardLayout({ children }) {
 
   const isNavMini = themeLayout === "mini";
 
+  const [isMobile, setIsMobile] = useState();
+
+  const { pathname } = useRouter();
+
+  // check if the current urlpath is /dashboard/play/sudoku/and id
+  const isPlaySudoku = pathname.includes("/dashboard/play/sudoku/");
+
+  const checkIfMobile = () => {
+    const userAgent = window.navigator.userAgent;
+    const mobileRegex = /Mobile|iPhone|iPod|Android/i;
+    const isMobileDevice = mobileRegex.test(userAgent);
+    return isMobileDevice;
+  };
+
+  useEffect(() => {
+    let timeoutId;
+    const handleResize = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        setIsMobile(checkIfMobile());
+      }, 1); // Adjust the debounce delay as needed
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    handleResize();
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -43,6 +79,11 @@ export default function DashboardLayout({ children }) {
   const renderNavVertical = (
     <NavVertical openNav={open} onCloseNav={handleClose} />
   );
+
+  const styles = {
+    p: 0,
+    m: 0,
+  };
 
   const renderContent = () => {
     if (isNavHorizontal) {
@@ -66,6 +107,7 @@ export default function DashboardLayout({ children }) {
             sx={{
               display: { lg: "flex" },
               minHeight: { lg: 1 },
+              overflow: isMobile && isPlaySudoku ? "hidden" : "auto",
             }}
           >
             {isDesktop ? <NavMini /> : renderNavVertical}
@@ -84,6 +126,7 @@ export default function DashboardLayout({ children }) {
           sx={{
             display: { lg: "flex" },
             minHeight: { lg: 1 },
+            overflow: isMobile && isPlaySudoku ? "hidden" : "auto",
           }}
         >
           {renderNavVertical}
@@ -94,5 +137,5 @@ export default function DashboardLayout({ children }) {
     );
   };
 
-  return <AuthGuard> {renderContent()} </AuthGuard>;
+  return <AuthGuard>{renderContent()}</AuthGuard>;
 }

@@ -4,9 +4,10 @@
 // IMPORTS
 // ------------------------------------------------------------------------------------------------
 import { Box, Grid, Typography, useTheme } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Iconify from "src/components/iconify/Iconify";
 import { useHint } from "src/hooks/useHint";
+import { isMobileContext } from "src/utils/isMobileProvider";
 
 // GLOBALS
 // ------------------------------------------------------------------------------------------------
@@ -24,10 +25,13 @@ export default function SudokuControls({
   // DATA & METHODS
   // ------------------------------------------------------------------------------------------------
   const theme = useTheme();
+  const buttonRef = useRef(null);
+  const { isMobile } = useContext(isMobileContext);
 
   // STATES
   // ------------------------------------------------------------------------------------------------
   const [selectedTab, setSelectedTab] = useState("number");
+  const [buttonWidth, setButtonWidth] = useState(0);
 
   // VARIABLES
   // ------------------------------------------------------------------------------------------------
@@ -35,7 +39,9 @@ export default function SudokuControls({
     border: "2px solid",
     borderColor: theme.palette.primary.light,
     color: "#282828",
-    height: "100%",
+    maxWidth: isMobile ? 60 : 75,
+    height: buttonWidth,
+    maxHeight: isMobile ? 60 : 75,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -56,11 +62,16 @@ export default function SudokuControls({
 
   // EFFECTS
   // ------------------------------------------------------------------------------------------------
+  useEffect(() => {
+    if (buttonRef.current) {
+      setButtonWidth(buttonRef.current.offsetWidth);
+    }
+  }, [buttonRef, buttonRef?.current?.offsetWidth]);
 
   // COMPONENT
   // ------------------------------------------------------------------------------------------------
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={1} sx={{ mt: isMobile ? 1 : "" }}>
       <Grid item xs={9}>
         {selectedTab === "hint" && (
           <>
@@ -77,8 +88,9 @@ export default function SudokuControls({
           </>
         )}
         {selectedTab === "number" && (
-          <Grid container spacing={1} sx={{ height: "100%" }}>
-            <Grid item xs={4}>
+          <Grid container spacing={0.5}>
+            {isMobile && <Grid item xs={3}></Grid>}
+            <Grid item xs={isMobile ? 3 : 4} ref={buttonRef}>
               <Box
                 sx={{
                   ...buttonStyle,
@@ -92,7 +104,7 @@ export default function SudokuControls({
                 <Typography variant="h3">1</Typography>
               </Box>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={isMobile ? 3 : 4}>
               <Box
                 sx={{
                   ...buttonStyle,
@@ -106,7 +118,7 @@ export default function SudokuControls({
                 <Typography variant="h3">2</Typography>
               </Box>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={isMobile ? 3 : 4}>
               <Box
                 sx={{
                   ...buttonStyle,
@@ -123,8 +135,9 @@ export default function SudokuControls({
           </Grid>
         )}
         {selectedTab === "notes" && (
-          <Grid container spacing={1} sx={{ height: "100%" }}>
-            <Grid item xs={4}>
+          <Grid container spacing={0.5} sx={{ height: "100%" }}>
+            {isMobile && <Grid item xs={3}></Grid>}
+            <Grid item xs={isMobile ? 3 : 4}>
               <Box
                 sx={{
                   ...buttonStyle,
@@ -141,7 +154,7 @@ export default function SudokuControls({
                 <Typography variant="h3alt">1</Typography>
               </Box>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={isMobile ? 3 : 4}>
               <Box
                 sx={{
                   ...buttonStyle,
@@ -157,7 +170,7 @@ export default function SudokuControls({
                 <Typography variant="h3alt">2</Typography>
               </Box>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={isMobile ? 3 : 4}>
               <Box
                 sx={{
                   ...buttonStyle,
@@ -177,7 +190,7 @@ export default function SudokuControls({
           </Grid>
         )}
         {selectedTab === "palette" && (
-          <Grid container spacing={1} sx={{ height: "100%" }}>
+          <Grid container spacing={0.5} sx={{ height: "100%" }}>
             <Grid item xs={4}>
               <Box
                 sx={{
@@ -212,8 +225,6 @@ export default function SudokuControls({
         <Box
           sx={{
             ...buttonStyle,
-            mb: 1,
-            height: "auto",
             backgroundColor:
               selectedTab === "number"
                 ? theme.palette.primary.lighter
@@ -226,8 +237,9 @@ export default function SudokuControls({
       </Grid>
       <Grid item xs={9}>
         {selectedTab === "number" && (
-          <Grid container spacing={1} sx={{ height: "100%" }}>
-            <Grid item xs={4}>
+          <Grid container spacing={0.5} sx={{ height: "100%" }}>
+            {isMobile && <Grid item xs={3}></Grid>}
+            <Grid item xs={isMobile ? 3 : 4}>
               <Box
                 sx={{
                   ...buttonStyle,
@@ -241,7 +253,7 @@ export default function SudokuControls({
                 <Typography variant="h3">4</Typography>
               </Box>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={isMobile ? 3 : 4}>
               <Box
                 sx={{
                   ...buttonStyle,
@@ -255,7 +267,7 @@ export default function SudokuControls({
                 <Typography variant="h3">5</Typography>
               </Box>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={isMobile ? 3 : 4}>
               <Box
                 sx={{
                   ...buttonStyle,
@@ -272,8 +284,9 @@ export default function SudokuControls({
           </Grid>
         )}
         {selectedTab === "notes" && (
-          <Grid container spacing={1} sx={{ height: "100%" }}>
-            <Grid item xs={4}>
+          <Grid container spacing={0.5} sx={{ height: "100%" }}>
+            {isMobile && <Grid item xs={3}></Grid>}
+            <Grid item xs={isMobile ? 3 : 4}>
               <Box
                 sx={{
                   ...buttonStyle,
@@ -290,7 +303,7 @@ export default function SudokuControls({
                 <Typography variant="h3alt">4</Typography>
               </Box>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={isMobile ? 3 : 4}>
               <Box
                 sx={{
                   ...buttonStyle,
@@ -306,7 +319,7 @@ export default function SudokuControls({
                 <Typography variant="h3alt">5</Typography>
               </Box>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={isMobile ? 3 : 4}>
               <Box
                 sx={{
                   ...buttonStyle,
@@ -326,7 +339,7 @@ export default function SudokuControls({
           </Grid>
         )}
         {selectedTab === "palette" && (
-          <Grid container spacing={1} sx={{ height: "100%" }}>
+          <Grid container spacing={0.5} sx={{ height: "100%" }}>
             <Grid item xs={4}>
               <Box
                 sx={{
@@ -361,12 +374,11 @@ export default function SudokuControls({
         <Box
           sx={{
             ...buttonStyle,
-            mb: 1,
-            height: "auto",
             backgroundColor:
               selectedTab === "notes"
                 ? theme.palette.primary.lighter
                 : "transparent",
+            textAlign: "center",
           }}
           onClick={() => setSelectedTab("notes")}
         >
@@ -415,8 +427,28 @@ export default function SudokuControls({
       </Grid>
       <Grid item xs={9}>
         {selectedTab === "number" && (
-          <Grid container spacing={1} sx={{ height: "100%" }}>
-            <Grid item xs={4}>
+          <Grid container spacing={0.5}>
+            {isMobile && (
+              <Grid item xs={3}>
+                <Box
+                  sx={buttonStyle}
+                  onClick={() => {
+                    selectedTab === "number"
+                      ? onNumberClick(0)
+                      : selectedTab === "notes"
+                      ? handleNoteClick(0)
+                      : null;
+                  }}
+                >
+                  <Iconify
+                    icon="mdi:window-close"
+                    width="90%"
+                    sx={{ maxWidth: 70 }}
+                  />
+                </Box>
+              </Grid>
+            )}
+            <Grid item xs={isMobile ? 3 : 4}>
               <Box
                 sx={{
                   ...buttonStyle,
@@ -430,7 +462,7 @@ export default function SudokuControls({
                 <Typography variant="h3">7</Typography>
               </Box>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={isMobile ? 3 : 4}>
               <Box
                 sx={{
                   ...buttonStyle,
@@ -444,7 +476,7 @@ export default function SudokuControls({
                 <Typography variant="h3">8</Typography>
               </Box>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={isMobile ? 3 : 4}>
               <Box
                 sx={{
                   ...buttonStyle,
@@ -461,8 +493,28 @@ export default function SudokuControls({
           </Grid>
         )}
         {selectedTab === "notes" && (
-          <Grid container spacing={1} sx={{ height: "100%" }}>
-            <Grid item xs={4}>
+          <Grid container spacing={0.5} sx={{ height: "100%" }}>
+            {isMobile && (
+              <Grid item xs={3}>
+                <Box
+                  sx={buttonStyle}
+                  onClick={() => {
+                    selectedTab === "number"
+                      ? onNumberClick(0)
+                      : selectedTab === "notes"
+                      ? handleNoteClick(0)
+                      : null;
+                  }}
+                >
+                  <Iconify
+                    icon="mdi:window-close"
+                    width="90%"
+                    sx={{ maxWidth: 70 }}
+                  />
+                </Box>
+              </Grid>
+            )}
+            <Grid item xs={isMobile ? 3 : 4}>
               <Box
                 sx={{
                   ...buttonStyle,
@@ -479,7 +531,7 @@ export default function SudokuControls({
                 <Typography variant="h3alt">7</Typography>
               </Box>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={isMobile ? 3 : 4}>
               <Box
                 sx={{
                   ...buttonStyle,
@@ -495,7 +547,7 @@ export default function SudokuControls({
                 <Typography variant="h3alt">8</Typography>
               </Box>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={isMobile ? 3 : 4}>
               <Box
                 sx={{
                   ...buttonStyle,
@@ -515,7 +567,7 @@ export default function SudokuControls({
           </Grid>
         )}
         {selectedTab === "palette" && (
-          <Grid container spacing={1} sx={{ height: "100%" }}>
+          <Grid container spacing={0.5} sx={{ height: "100%" }}>
             <Grid item xs={4}>
               <Box
                 sx={{
@@ -581,48 +633,53 @@ export default function SudokuControls({
           />
         </Box>
       </Grid>
-      <Grid item xs={9}>
-        <Grid container spacing={1} sx={{ height: "100%" }}>
-          <Grid item xs={4}>
-            {/* <Box onClick={onPreviousClick} sx={buttonStyle}>
+      {!isMobile && (
+        <>
+          <Grid item xs={9}>
+            <Grid container spacing={0.5}>
+              {isMobile && <Grid item xs={3}></Grid>}
+              <Grid item xs={isMobile ? 3 : 4}>
+                {/* <Box onClick={onPreviousClick} sx={buttonStyle}>
               <Iconify
                 icon="mdi:arrow-u-left-top"
                 width="90%"
                 sx={{ maxWidth: 70 }}
               />
             </Box> */}
-          </Grid>
-          <Grid item xs={4}>
-            {/* <Box onClick={onNextClick} sx={buttonStyle}>
+              </Grid>
+              <Grid item xs={isMobile ? 3 : 4}>
+                {/* <Box onClick={onNextClick} sx={buttonStyle}>
               <Iconify
                 icon="mdi:arrow-u-right-top"
                 width="90%"
                 sx={{ maxWidth: 70 }}
               />
             </Box> */}
-          </Grid>
-          {selectedTab !== "hint" && (
-            <Grid item xs={4}>
-              <Box
-                sx={buttonStyle}
-                onClick={() => {
-                  selectedTab === "number"
-                    ? onNumberClick(0)
-                    : selectedTab === "notes"
-                    ? handleNoteClick(0)
-                    : null;
-                }}
-              >
-                <Iconify
-                  icon="mdi:window-close"
-                  width="90%"
-                  sx={{ maxWidth: 70 }}
-                />
-              </Box>
+              </Grid>
+              {selectedTab !== "hint" && (
+                <Grid item xs={isMobile ? 3 : 4}>
+                  <Box
+                    sx={buttonStyle}
+                    onClick={() => {
+                      selectedTab === "number"
+                        ? onNumberClick(0)
+                        : selectedTab === "notes"
+                        ? handleNoteClick(0)
+                        : null;
+                    }}
+                  >
+                    <Iconify
+                      icon="mdi:window-close"
+                      width="90%"
+                      sx={{ maxWidth: 70 }}
+                    />
+                  </Box>
+                </Grid>
+              )}
             </Grid>
-          )}
-        </Grid>
-      </Grid>
+          </Grid>
+        </>
+      )}
     </Grid>
   );
 }

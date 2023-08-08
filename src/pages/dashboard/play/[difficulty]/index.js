@@ -150,6 +150,7 @@ export default function DifficultyScreen() {
                   difficulty={difficulties[difficulty]}
                   onClick={handleLevelClick}
                   selectedLevel={selectedLevel}
+                  savedLevels={savedDifficultyLevels}
                 />
               ) : (
                 <Card sx={{ p: 2 }}>
@@ -158,6 +159,7 @@ export default function DifficultyScreen() {
                     difficulty={difficulties[difficulty]}
                     onClick={handleLevelClick}
                     selectedLevel={selectedLevel}
+                    savedLevels={savedDifficultyLevels}
                   />
                 </Card>
               )}

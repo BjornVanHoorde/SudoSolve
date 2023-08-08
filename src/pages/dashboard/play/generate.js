@@ -32,7 +32,6 @@ import { useSnackbar } from "src/components/snackbar";
 import Iconify from "src/components/iconify/Iconify";
 import { loaderAnimation2 } from "src/utils/loaderAnimation2";
 import Lottie from "lottie-react";
-import { loaderAnimation } from "src/utils/loaderAnimation";
 
 // GLOBALS
 // ------------------------------------------------------------------------------------------------

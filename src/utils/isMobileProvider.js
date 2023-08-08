@@ -9,7 +9,7 @@ export const IsMobileProvider = (props) => {
 
   const checkIfMobile = () => {
     const userAgent = window.navigator.userAgent;
-    const mobileRegex = /Mobile|iPhone|iPad|iPod|Android/i;
+    const mobileRegex = /Mobile|iPhone|iPod|Android/i;
     const isMobileDevice = mobileRegex.test(userAgent);
     return isMobileDevice;
   };

@@ -60,12 +60,6 @@ export const difficulties = {
       icon: "/assets/icons/difficulties/bolt-solid.svg",
     },
     {
-      name: "Fiendish",
-      color: "#800080",
-      textColor: "#ffffff",
-      icon: "/assets/icons/difficulties/fire-solid.svg",
-    },
-    {
       name: "Evil",
       color: "#000000",
       textColor: "#ffffff",

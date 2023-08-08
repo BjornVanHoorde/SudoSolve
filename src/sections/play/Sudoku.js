@@ -3,8 +3,9 @@
 
 // IMPORTS
 // ------------------------------------------------------------------------------------------------
-import { Box, Grid, Typography, useTheme } from "@mui/material";
-import { useState } from "react";
+import { Box, Card, Grid, Typography, useTheme } from "@mui/material";
+import { useContext, useEffect, useState } from "react";
+import { isMobileContext } from "src/utils/isMobileProvider";
 
 // GLOBALS
 // ------------------------------------------------------------------------------------------------
@@ -19,10 +20,12 @@ export default function Sudoku({
   highlightedNumber,
   settings,
   isRunning,
+  isSolved,
 }) {
   // DATA & METHODS
   // ------------------------------------------------------------------------------------------------
   const theme = useTheme();
+  const { isMobile } = useContext(isMobileContext);
 
   // STATES
   // ------------------------------------------------------------------------------------------------
@@ -77,7 +80,7 @@ export default function Sudoku({
   // ------------------------------------------------------------------------------------------------
   return (
     <>
-      {!isRunning && (
+      {!isRunning && !isMobile && !isSolved && (
         <>
           <Typography
             variant="h1"
@@ -99,11 +102,33 @@ export default function Sudoku({
           </Typography>
         </>
       )}
+      {!isRunning && isMobile && !isSolved && (
+        <Card sx={{ height: 35 * 10 - 8 }}>
+          <Typography
+            variant="h1"
+            sx={{
+              textAlign: "center",
+              userSelect: "none",
+            }}
+          >
+            PAUSED
+          </Typography>
+          <Typography
+            variant="h3"
+            sx={{
+              textAlign: "center",
+              userSelect: "none",
+            }}
+          >
+            No peeking! 🙈
+          </Typography>
+        </Card>
+      )}
       <Box
         sx={{
           textAlign: "center",
           userSelect: "none",
-          display: isRunning ? "" : "none",
+          display: isRunning || isSolved ? "" : "none",
         }}
       >
         <Box

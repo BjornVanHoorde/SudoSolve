@@ -7,17 +7,15 @@ export const getDifficulty = (board) => {
       }
     }
   }
-  if (amountOfEmptyCells <= 45) {
+  if (amountOfEmptyCells <= 42) {
     return "novice";
-  } else if (amountOfEmptyCells <= 52) {
+  } else if (amountOfEmptyCells <= 47) {
     return "easy";
-  } else if (amountOfEmptyCells <= 58) {
+  } else if (amountOfEmptyCells <= 54) {
     return "medium";
-  } else if (amountOfEmptyCells <= 64) {
+  } else if (amountOfEmptyCells <= 60) {
     return "hard";
-  } else if (amountOfEmptyCells <= 69) {
-    return "expert";
   } else {
-    return "fiendish";
+    return "evil";
   }
 };

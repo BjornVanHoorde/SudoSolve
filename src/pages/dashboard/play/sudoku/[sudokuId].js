@@ -4,8 +4,14 @@
 // IMPORTS
 // ------------------------------------------------------------------------------------------------
 import {
+  Button,
   Card,
   Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Grid,
   IconButton,
   Stack,
@@ -29,6 +35,10 @@ import SudokuControls from "src/sections/play/SudokuControls";
 import { isMobileContext } from "src/utils/isMobileProvider";
 import { usePageFocus } from "src/hooks/usePageFocus";
 import { usePageVisibility } from "src/hooks/usePageVisibility";
+import { isSolved } from "src/utils/isSolved";
+import { isSolvedAnimation } from "src/utils/isSolvedAnimation";
+import Lottie from "lottie-react";
+import { PATH_DASHBOARD } from "src/routes/paths";
 
 // GLOBALS
 // ------------------------------------------------------------------------------------------------
@@ -48,6 +58,7 @@ export default function playSudokuScreen() {
   const { sudokuId } = useRouter().query;
   const selectedSavedSudokuRef = useRef();
   const timerRef = useRef();
+  const { push } = useRouter();
 
   // STATES
   // ------------------------------------------------------------------------------------------------
@@ -60,6 +71,9 @@ export default function playSudokuScreen() {
 
   const [isTimerSet, setIsTimerSet] = useState(false);
   const [savingState, setSavingState] = useState(false);
+  const [isSolvedState, setIsSolvedState] = useState(false);
+  const [isSolvedAnimationState, setIsSolvedAnimationState] = useState(false);
+  const [isSolvedSaved, setIsSolvedSaved] = useState(false);
 
   // VARIABLES
   // ------------------------------------------------------------------------------------------------
@@ -84,6 +98,8 @@ export default function playSudokuScreen() {
   // ------------------------------------------------------------------------------------------------
   const handleCellSelect = (row, col, multiple) => {
     if (multiple) {
+      if (selectedCells.some((cell) => cell.row === row && cell.col === col))
+        return;
       setSelectedCells([...selectedCells, { row, col }]);
     } else {
       if (selectedCells.length === 1) {
@@ -245,6 +261,10 @@ export default function playSudokuScreen() {
     });
   };
 
+  const handleBackClick = () => {
+    push(PATH_DASHBOARD.play.root);
+  };
+
   // EFFECTS
   // ------------------------------------------------------------------------------------------------
   useEffect(() => {
@@ -288,7 +308,7 @@ export default function playSudokuScreen() {
   }, [user, users]);
 
   useEffect(() => {
-    if (savingState) return;
+    if (savingState || isSolvedState) return;
     if (selectedCells.length === 1) {
       setHighlightedNumber(
         selectedSavedSudoku?.board[selectedCells[0].row][selectedCells[0].col]
@@ -301,7 +321,7 @@ export default function playSudokuScreen() {
 
   useEffect(() => {
     const autosave = setInterval(() => {
-      if (selectedSavedSudokuRef.current) {
+      if (selectedSavedSudokuRef.current && !isSolvedState) {
         setSavingState(true);
         fb_update_savedSudoku(selectedSavedSudokuRef.current.sudokuId, {
           ...selectedSavedSudokuRef.current,
@@ -320,12 +340,12 @@ export default function playSudokuScreen() {
   }, []);
 
   useEffect(() => {
-    if (savingState) return;
+    if (savingState || isSolvedState) return;
     selectedSavedSudokuRef.current = selectedSavedSudoku;
   }, [selectedSavedSudoku]);
 
   useEffect(() => {
-    if (!selectedSavedSudoku) return;
+    if (!selectedSavedSudoku || isSolvedState) return;
     if (isTimerSet) {
       timerRef.current = {
         seconds,
@@ -357,6 +377,26 @@ export default function playSudokuScreen() {
     }
   }, [isVisible, isFocussed]);
 
+  useEffect(() => {
+    // check if the sudoku is solved
+    if (!selectedSavedSudoku || isSolvedSaved) return;
+    if (isSolved(selectedSavedSudoku.board)) {
+      pause();
+      setIsSolvedAnimationState(true);
+      setIsSolvedState(true);
+      fb_update_savedSudoku(selectedSavedSudoku.sudokuId, {
+        ...selectedSavedSudoku,
+        isSolved: true,
+        time: {
+          seconds: seconds,
+          minutes: minutes,
+        },
+      }).then(() => {
+        setIsSolvedSaved(true);
+      });
+    }
+  }, [selectedSavedSudoku]);
+
   // COMPONENT
   // ------------------------------------------------------------------------------------------------1
   return (
@@ -365,9 +405,51 @@ export default function playSudokuScreen() {
         <title>SudoSolve</title>
       </Head>
 
+      {isSolvedAnimationState && (
+        <Lottie
+          animationData={isSolvedAnimation}
+          loop={false}
+          autoplay={true}
+          onComplete={() => {
+            setIsSolvedAnimationState(false);
+          }}
+          style={{
+            width: "100%",
+            height: "100%",
+            position: "absolute",
+            top: 0,
+            left: 0,
+            zIndex: 999999,
+          }}
+        />
+      )}
+
+      {isSolvedState && (
+        <>
+          <Dialog
+            open={isSolvedState}
+            onClose={() => setIsSolvedState(false)}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">
+              {"Congratulations!"}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                You have solved the sudoku!
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleBackClick}>Go back</Button>
+            </DialogActions>
+          </Dialog>
+        </>
+      )}
+
       {settings && (
         <Container maxWidth={themeStretch ? false : "xl"}>
-          {settings.BA === "right" && (
+          {settings.BA === "right" && !isMobile && (
             <Grid container spacing={isMobile ? 2 : 3} sx={{ mt: 5 }}>
               <Grid item xs={12} lg={8}>
                 <Card sx={{ p: 2 }}>
@@ -380,6 +462,7 @@ export default function playSudokuScreen() {
                       highlightedNumber={highlightedNumber}
                       settings={settings}
                       isRunning={isRunning}
+                      isSolved={isSolvedState}
                     />
                   )}
                 </Card>
@@ -425,7 +508,70 @@ export default function playSudokuScreen() {
               </Grid>
             </Grid>
           )}
-          {settings.BA === "left" && (
+          {isMobile && (
+            <>
+              <Stack
+                direction="row"
+                spacing={2}
+                justifyContent="center"
+                alignItems="center"
+                sx={{
+                  textAlign: "center",
+                  position: "fixed",
+                  top: 20,
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  zIndex: 99999999999999,
+                }}
+              >
+                <Typography variant="h6">{`${
+                  minutes < 10 ? "0" + minutes : minutes
+                }:${seconds < 10 ? "0" + seconds : seconds}`}</Typography>
+                <IconButton
+                  onClick={() => {
+                    if (isRunning) {
+                      pause();
+                    } else {
+                      start();
+                    }
+                  }}
+                >
+                  <Iconify icon={isRunning ? "mdi:pause" : "mdi:play"} />
+                </IconButton>
+              </Stack>
+              <Grid container spacing={0}>
+                <Grid item xs={12}>
+                  {selectedSavedSudoku && (
+                    <Sudoku
+                      level={selectedSavedSudoku}
+                      size={35}
+                      onCellSelect={handleCellSelect}
+                      selectedCells={selectedCells}
+                      highlightedNumber={highlightedNumber}
+                      settings={settings}
+                      isRunning={isRunning}
+                      isSolved={isSolvedState}
+                    />
+                  )}
+                </Grid>
+                <Grid item xs={12}>
+                  <Stack spacing={2}>
+                    {selectedSavedSudoku && (
+                      <SudokuControls
+                        highlightedNumber={highlightedNumber}
+                        settings={settings}
+                        onNumberClick={handleNumberClick}
+                        handleNoteClick={handleNoteClick}
+                        handlePaletteClick={handlePaletteClick}
+                        sudoku={selectedSavedSudoku}
+                      />
+                    )}
+                  </Stack>
+                </Grid>
+              </Grid>
+            </>
+          )}
+          {settings.BA === "left" && !isMobile && (
             <Grid container spacing={isMobile ? 2 : 3} sx={{ mt: 5 }}>
               <Grid item xs={12} lg={4}>
                 <Stack spacing={2}>
@@ -477,6 +623,7 @@ export default function playSudokuScreen() {
                       highlightedNumber={highlightedNumber}
                       settings={settings}
                       isRunning={isRunning}
+                      isSolved={isSolvedState}
                     />
                   )}
                 </Card>

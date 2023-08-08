@@ -191,6 +191,7 @@ export default function PlayMySudokusScreen() {
                   levels={sortedSudokus}
                   onClick={handleLevelClick}
                   selectedLevel={selectedLevel}
+                  savedLevels={savedSudokus}
                 />
               ) : (
                 <Card sx={{ p: 2 }}>
@@ -198,6 +199,7 @@ export default function PlayMySudokusScreen() {
                     levels={sortedSudokus}
                     onClick={handleLevelClick}
                     selectedLevel={selectedLevel}
+                    savedLevels={savedSudokus}
                   />
                 </Card>
               )}
