@@ -54,7 +54,7 @@ export default function NavItem({
       )}
 
       <ListItemText
-        primary={`${translate(title)}`}
+        primary={`${translate(title.toLowerCase())}`}
         secondary={
           caption && (
             <Tooltip title={`${translate(caption)}`} placement="top-start">

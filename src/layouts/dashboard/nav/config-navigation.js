@@ -4,6 +4,7 @@ import { PATH_DASHBOARD } from "../../../routes/paths";
 import Label from "../../../components/label";
 import Iconify from "../../../components/iconify";
 import SvgColor from "../../../components/svg-color";
+import { useLocales } from "src/locales";
 
 // ----------------------------------------------------------------------
 

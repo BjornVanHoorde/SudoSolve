@@ -15,6 +15,7 @@ export const allLangs = [
     label: "Nederlands",
     value: "nl",
     systemValue: nlNL,
+    icon: "/assets/icons/flags/ic_flag_nl.svg",
   },
 ];
 

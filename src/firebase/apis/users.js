@@ -36,8 +36,10 @@ export const initialStateUser = {
     HRC: true,
     HE: true,
     BA: "right",
+    language: "",
   },
   type: "User",
+  newUser: true,
 };
 
 // --- SNAPSHOT --------------------------------

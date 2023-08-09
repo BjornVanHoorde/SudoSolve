@@ -92,6 +92,19 @@ const nl = {
   nakedSingleIn: "Naakte single in",
   hiddenSingleIn: "Verborgen single in",
   in: "in",
+  chooseALanguage: "Kies een taal",
+  welcomeToSudoSolve: "Welkom bij SudoSolve+",
+  welcomeMessage:
+    "SudoSolve+ is een sudoku-app met een focus op gameplay. Naast het oplossen van voorafgemaakte sudoku's kan je er zelf ook genereren en opslaan. Daarnaast is er ook een mogelijkheid op sudoku's te scannen om deze te digitaliseren.",
+  bapText:
+    "Deze applicatie is gemaakt naar aanleiding van mijn bachelorproef. Samen met mijn liefde voor Sudoku heb ik deze applicatie gemaakt om mezelf uit te dagen en meer te verdiepen in de mooie wereld van Sudoku.",
+  supportText:
+    "Als je de applicatie leuk vindt, kan je mij altijd steunen door eventuele verbeterpunten en bugs te melden. Dit kan je doen in de instellingen tab.",
+  haveFunText: "Veel plezier met de applicatie!",
+  reportSomething: "Meld iets",
+  bugReportOrFeedback: "Bug melden of feedback geven",
+  pleaseDescribeTheIssueOrProvideFeedbackHere:
+    "Beschrijf hier het probleem of geef feedback",
 };
 
 export default nl;

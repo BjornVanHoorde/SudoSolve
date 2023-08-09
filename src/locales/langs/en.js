@@ -92,6 +92,19 @@ const en = {
   nakedSingleIn: "Naked single in",
   hiddenSingleIn: "Hidden single in",
   in: "in",
+  chooseALanguage: "Choose a language",
+  welcomeToSudoSolve: "Welcome to SudoSolve+",
+  welcomeMessage:
+    "SudoSolve+ is a sudoku app with a focus on gameplay. In addition to solving pre-made sudoku puzzles, you can also generate and save your own. Furthermore, there is also an option to scan sudoku puzzles for digitalization.",
+  bapText:
+    "This application was created based on my bachelor's thesis. Alongside my passion for Sudoku, I developed this app to challenge myself and delve deeper into the fascinating world of Sudoku.",
+  supportText:
+    "If you enjoy the app, you can always support me by providing feedback on potential improvements and reporting any bugs. You can do this in the settings tab.",
+  haveFunText: "Enjoy using the application!",
+  reportSomething: "Report something",
+  bugReportOrFeedback: "Bug report or feedback",
+  pleaseDescribeTheIssueOrProvideFeedbackHere:
+    "Please describe the issue or provide feedback here",
 };
 
 export default en;

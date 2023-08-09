@@ -4,7 +4,20 @@
 // IMPORTS
 // ------------------------------------------------------------------------------------------------
 import Head from "next/head";
-import { Box, Card, Container, Grid, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Card,
+  Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Grid,
+  Stack,
+  Typography,
+} from "@mui/material";
 import DashboardLayout from "src/layouts/dashboard/DashboardLayout";
 import { useSettingsContext } from "src/components/settings";
 import { useAuthContext } from "src/auth/useAuthContext";
@@ -12,8 +25,10 @@ import { PRIMARY, SECONDARY } from "src/theme/palette";
 import { useRouter } from "next/router";
 import { PATH_DASHBOARD } from "src/routes/paths";
 import { isMobileContext } from "src/utils/isMobileProvider";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useLocales } from "src/locales";
+import { dataContext } from "src/firebase/dataProvider";
+import { fb_update_user } from "src/firebase/apis/users";
 
 // GLOBALS
 // ------------------------------------------------------------------------------------------------
@@ -28,19 +43,59 @@ export default function GeneralAppPage() {
   const { themeStretch } = useSettingsContext();
   const { push } = useRouter();
   const { isMobile } = useContext(isMobileContext);
-  const { translate } = useLocales();
+  const { translate, onChangeLang, allLangs } = useLocales();
+  const { users } = useContext(dataContext);
 
   // STATES
   // ------------------------------------------------------------------------------------------------
+  const [userSnapshot, setUserSnapshot] = useState(null);
+  const [languageDialogOpen, setLanguageDialogOpen] = useState(false);
+  const [welcomeMessageDialogOpen, setWelcomeMessageDialogOpen] =
+    useState(false);
 
   // VARIABLES
   // ------------------------------------------------------------------------------------------------
 
   // FUNCTIONS
   // ------------------------------------------------------------------------------------------------
+  const handleLangClick = (lang) => {
+    onChangeLang(lang.value);
+    setLanguageDialogOpen(false);
+    fb_update_user(user.userId, {
+      settings: {
+        ...userSnapshot.settings,
+        language: lang.value,
+      },
+    });
+  };
+
+  const handleWelcomeMessageClose = () => {
+    setWelcomeMessageDialogOpen(false);
+    fb_update_user(user.userId, {
+      newUser: false,
+    });
+  };
 
   // EFFECTS
   // ------------------------------------------------------------------------------------------------
+  useEffect(() => {
+    if (user && users) {
+      setUserSnapshot(
+        users.find((userSnapshot) => userSnapshot.userId === user.userId)
+      );
+    }
+  }, [user, users]);
+
+  useEffect(() => {
+    if (userSnapshot) {
+      if (userSnapshot.newUser) {
+        setWelcomeMessageDialogOpen(true);
+      }
+      if (userSnapshot.settings.language === "") {
+        setLanguageDialogOpen(true);
+      }
+    }
+  }, [userSnapshot]);
 
   // COMPONENT
   // ------------------------------------------------------------------------------------------------
@@ -211,6 +266,64 @@ export default function GeneralAppPage() {
             </Stack>
           </Grid>
         </Grid>
+
+        <Dialog open={welcomeMessageDialogOpen}>
+          <DialogTitle>{translate("welcomeToSudoSolve")}</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              <>
+                <Typography variant="body1" gutterBottom>
+                  {translate("welcomeMessage")}
+                </Typography>
+                <Typography variant="body1" gutterBottom>
+                  {translate("bapText")}
+                </Typography>
+                <Typography variant="body1" gutterBottom>
+                  {translate("supportText")}
+                </Typography>
+                <Typography variant="h6" gutterBottom>
+                  {translate("haveFunText")}
+                </Typography>
+              </>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleWelcomeMessageClose}>
+              {translate("ok")}
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        <Dialog open={languageDialogOpen}>
+          <DialogTitle>{translate("language")}</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              {translate("chooseALanguage")}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            {allLangs.map((lang) => (
+              <Button
+                startIcon={
+                  lang.icon && (
+                    <img
+                      src={lang.icon}
+                      alt={lang.label}
+                      style={{ height: "25px", width: "25px" }}
+                    />
+                  )
+                }
+                variant="outlined"
+                key={lang}
+                onClick={() => {
+                  handleLangClick(lang);
+                }}
+              >
+                {lang.label}
+              </Button>
+            ))}
+          </DialogActions>
+        </Dialog>
       </Container>
     </>
   );

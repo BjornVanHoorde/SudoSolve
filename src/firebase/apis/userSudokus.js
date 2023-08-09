@@ -33,10 +33,6 @@ export const snapshot_userSudokus = (state, userId) => {
     try {
       if (result.docs.length != 0) {
         state(result.docs.map((doc) => doc.data()));
-        console.log(
-          "[apis] (userSudokus - snapshot_userSudokus) userSudokus: ",
-          result.docs.map((doc) => doc.data())
-        );
       } else {
         state([]);
       }

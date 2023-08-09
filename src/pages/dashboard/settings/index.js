@@ -5,6 +5,7 @@
 // ------------------------------------------------------------------------------------------------
 import Head from "next/head";
 import {
+  Button,
   Card,
   Container,
   Grid,
@@ -24,6 +25,7 @@ import { dataContext } from "src/firebase/dataProvider";
 import ColorPresetsOptions from "src/components/settings/drawer/ColorPresetsOptions";
 import { useTheme } from "@emotion/react";
 import { useLocales } from "src/locales";
+import Iconify from "src/components/iconify/Iconify";
 
 // GLOBALS
 // ------------------------------------------------------------------------------------------------
@@ -63,6 +65,18 @@ export default function SettingsIndexScreen() {
     }
   };
 
+  const handleReportClick = () => {
+    const receiverEmail = "sudosolve@hotmail.com";
+    const subject = encodeURIComponent(translate("bugReportOrFeedback"));
+    const body = encodeURIComponent(
+      translate("pleaseDescribeTheIssueOrProvideFeedbackHere")
+    );
+
+    const mailtoLink = `mailto:${receiverEmail}?subject=${subject}&body=${body}`;
+
+    window.location.href = mailtoLink;
+  };
+
   // EFFECTS
   // ------------------------------------------------------------------------------------------------
   useEffect(() => {
@@ -79,8 +93,21 @@ export default function SettingsIndexScreen() {
         <title>{"SudoSolve | " + translate("settings")}</title>
       </Head>
 
-      <Container maxWidth={themeStretch ? false : "xl"}>
-        <CustomBreadcrumbs heading={translate("settings")} links={[]} />
+      <Container maxWidth={themeStretch ? false : "xl"} sx={{ mt: 1 }}>
+        <CustomBreadcrumbs
+          heading={translate("settings")}
+          links={[]}
+          action={
+            <Button
+              endIcon={<Iconify icon="cil:paper-plane" />}
+              variant="contained"
+              color="warning"
+              onClick={handleReportClick}
+            >
+              {translate("reportSomething")}
+            </Button>
+          }
+        />
 
         {snapshotUser && (
           <Grid container spacing={3}>
