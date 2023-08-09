@@ -11,6 +11,10 @@ logs
 node_modules
 .next
 bower_components
+out
+.firebaserc
+.firebase
+firebase.json
 
 *.sublime*
 
