@@ -67,9 +67,10 @@ export const fb_create_userSudoku = (data) => {
       dateCreated: new Date(),
     })
       .then((r) => {
-        return fb_update_userSudoku(r.id, {
+        fb_update_userSudoku(r.id, {
           sudokuId: r.id,
         });
+        return r.id;
       })
       .catch((err) => {
         throw new Error(err);

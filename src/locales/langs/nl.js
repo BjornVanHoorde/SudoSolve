@@ -39,7 +39,7 @@ const nl = {
   fileIsNotAnImage: "Bestand is geen afbeelding",
   sudokuSaved: "Sudoku opgeslagen",
   makeSureTheSudokuIsCenteredEtc:
-    "Zorg ervoor dat de sudoku is gecentreerd, recht staat en dominant aanwezig is in de afbeelding voor het beste resultaat.",
+    "Zorg ervoor dat de sudoku is gecentreerd, recht staat en dominant aanwezig is in de afbeelding voor het beste resultaat. Zorg er ook voor dat de verlichting overal zo goed als gelijk is.",
   upload: "Uploaden",
   selectSudoku: "Selecteer sudoku",
   dropFilesHereOrClick: "Sleep bestanden hierheen of klik om te",

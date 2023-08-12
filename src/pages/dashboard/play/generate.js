@@ -256,85 +256,84 @@ export default function playGenerateScreen() {
                   />
                 </Stack>
               )}
-              <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-                sx={{ mb: 2 }}
-              >
-                <Typography variant="h5">
-                  {translate(difficulty.name)}
-                </Typography>
-                <IconButton
-                  onClick={handleClose}
-                  color="error"
-                  sx={{ ml: "auto" }}
-                >
-                  <Iconify icon="mdi:close" />
-                </IconButton>
-              </Stack>
+              {sudoku && (
+                <>
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    sx={{ mb: 2 }}
+                  >
+                    <Typography variant="h5">
+                      {translate(difficulty.name)}
+                    </Typography>
+                    <IconButton
+                      onClick={handleClose}
+                      color="error"
+                      sx={{ ml: "auto" }}
+                    >
+                      <Iconify icon="mdi:close" />
+                    </IconButton>
+                  </Stack>
 
-              <Grid container spacing={3}>
-                {!sudoku && (
-                  <Lottie animation={loaderAnimation2} height={200} />
-                )}
-                {sudoku && (
-                  <>
-                    <Grid item xs={12} md={6}>
-                      <PreviewLevel level={sudoku} />
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                      <Stack
-                        spacing={2}
-                        justifyContent="end"
-                        sx={{ height: "100%", pb: 3 }}
-                      >
-                        <Button
-                          variant="contained"
-                          sx={{
-                            backgroundColor: PRIMARY.main,
-                            color: "#fff",
-                            "&:hover": {
-                              backgroundColor: PRIMARY.dark,
-                              boxShadow: "none",
-                            },
-                          }}
+                  <Grid container spacing={3}>
+                    <>
+                      <Grid item xs={12} md={6}>
+                        <PreviewLevel level={sudoku} />
+                      </Grid>
+                      <Grid item xs={12} md={6}>
+                        <Stack
+                          spacing={2}
+                          justifyContent="end"
+                          sx={{ height: "100%", pb: 3 }}
                         >
-                          Play
-                        </Button>
-                        <Button
-                          variant="outlined"
-                          sx={{
-                            borderColor: PRIMARY.main,
-                            color: PRIMARY.main,
-                            "&:hover": {
-                              backgroundColor: PRIMARY.lighter,
-                              borderColor: PRIMARY.light,
-                            },
-                          }}
-                          onClick={handleSave}
-                        >
-                          {translate("saveForLater")}
-                        </Button>
-                        <Button
-                          variant="outlined"
-                          sx={{
-                            borderColor: PRIMARY.main,
-                            color: PRIMARY.main,
-                            "&:hover": {
-                              backgroundColor: PRIMARY.lighter,
-                              borderColor: PRIMARY.light,
-                            },
-                          }}
-                          onClick={() => handleClick(difficulty)}
-                        >
-                          {translate("generateAgain")}
-                        </Button>
-                      </Stack>
-                    </Grid>
-                  </>
-                )}
-              </Grid>
+                          <Button
+                            variant="contained"
+                            sx={{
+                              backgroundColor: PRIMARY.main,
+                              color: "#fff",
+                              "&:hover": {
+                                backgroundColor: PRIMARY.dark,
+                                boxShadow: "none",
+                              },
+                            }}
+                          >
+                            Play
+                          </Button>
+                          <Button
+                            variant="outlined"
+                            sx={{
+                              borderColor: PRIMARY.main,
+                              color: PRIMARY.main,
+                              "&:hover": {
+                                backgroundColor: PRIMARY.lighter,
+                                borderColor: PRIMARY.light,
+                              },
+                            }}
+                            onClick={handleSave}
+                          >
+                            {translate("saveForLater")}
+                          </Button>
+                          <Button
+                            variant="outlined"
+                            sx={{
+                              borderColor: PRIMARY.main,
+                              color: PRIMARY.main,
+                              "&:hover": {
+                                backgroundColor: PRIMARY.lighter,
+                                borderColor: PRIMARY.light,
+                              },
+                            }}
+                            onClick={() => handleClick(difficulty)}
+                          >
+                            {translate("generateAgain")}
+                          </Button>
+                        </Stack>
+                      </Grid>
+                    </>
+                  </Grid>
+                </>
+              )}
             </Card>
           </Dialog>
         )}

@@ -39,7 +39,7 @@ const en = {
   fileIsNotAnImage: "File is not an image",
   sudokuSaved: "Sudoku saved",
   makeSureTheSudokuIsCenteredEtc:
-    "Make sure the sudoku is centered, upright and dominant in the image for best results.",
+    "Make sure the sudoku is centered, upright and dominant in the image for best results. Also, make sure that the lighting is as consistent as possible everywhere.",
   upload: "Upload",
   selectSudoku: "Select sudoku",
   dropFilesHereOrClick: "Drop files here or click to",
@@ -83,7 +83,7 @@ const en = {
   youHaveSolvedTheSudoku: "You have solved the sudoku",
   goBack: "Go back",
   paused: "Paused",
-  nopeeking: "No peeking!",
+  noPeeking: "No peeking!",
   noHintAvailable: "No hint available",
   lastEmptyCellIn: "Last empty cell in",
   row: "row",

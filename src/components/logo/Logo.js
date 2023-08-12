@@ -33,7 +33,6 @@ const Logo = forwardRef(
         ref={ref}
         component="div"
         sx={{
-          width: 40,
           height: 40,
           display: "inline-flex",
           ...sx,
@@ -41,10 +40,12 @@ const Logo = forwardRef(
         {...other}
       >
         <svg
+          id="SudoSolveLogo"
+          data-name="SudoSolveLogo"
           xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 300 300"
           className="iconLeft"
-          transform="scale(7) translate(12, 0)"
+          height="100%"
+          viewBox="40 125 300 50"
         >
           <path
             fill="transparent"
@@ -69,7 +70,7 @@ const Logo = forwardRef(
             <path d="M66 5H5v90h90V5H66zm-2 2v27H36V7h28zm-7.793 57H36V36h28v20.207L56.207 64zM7 7h27v27H7V7zm0 29h27v28H7V36zm0 57V66h27v27H7zm29 0V66h18.207L43.653 76.554l10.293 10.293L64 76.793V93H36zm57 0H66V74.793L74.793 66H93v27zm0-29H76.793l8.031-8.031-10.293-10.293L66 54.207V36h27v28zM66 34V7h27v27H66z" />
             <path d="m75.56 44.647 5.146-5.147 10.292 10.293-5.146 5.146zM42.623 77.584l-1.544 6.69-1.544 6.69 6.691-1.543 6.69-1.544-5.146-5.147z" />
           </g>
-        </svg>{" "}
+        </svg>
       </Box>
     );
 
@@ -78,18 +79,19 @@ const Logo = forwardRef(
         ref={ref}
         component="div"
         sx={{
-          width: 40,
-          height: 40,
           display: "inline-flex",
+          width: 50,
           ...sx,
+          margin: 0,
         }}
         {...other}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 300 300"
+          viewBox="35 122 50 50"
           className="iconLeft"
-          transform="scale(7) translate(12, 0)"
+          height="100%"
+          width="100%"
         >
           <defs>
             <linearGradient

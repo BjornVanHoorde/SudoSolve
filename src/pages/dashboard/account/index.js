@@ -158,13 +158,14 @@ export default function AccountIndexScreen() {
                     }
                     alt="avatar"
                     style={{
-                      maxWidth: "400px",
+                      maxWidth: "250px",
                       height: "auto",
                       margin: "0 auto",
+                      borderRadius: "50%",
                     }}
                   />
                   <Button
-                    sx={{ width: "400px", margin: "0 auto" }}
+                    sx={{ width: "250px", margin: "0 auto" }}
                     color="error"
                     onClick={handlePictureRemove}
                   >
@@ -188,7 +189,12 @@ export default function AccountIndexScreen() {
               </Stack>
             </Grid>
           </Grid>
-          <Stack direction="row" spacing={2} justifyContent="flex-end">
+          <Stack
+            direction="row"
+            spacing={2}
+            justifyContent="flex-end"
+            sx={{ mt: 5 }}
+          >
             <Button
               variant="contained"
               onClick={onSubmit}

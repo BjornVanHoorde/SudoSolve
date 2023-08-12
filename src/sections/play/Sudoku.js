@@ -4,7 +4,7 @@
 // IMPORTS
 // ------------------------------------------------------------------------------------------------
 import { Box, Card, Grid, Typography, useTheme } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useLocales } from "src/locales";
 import { isMobileContext } from "src/utils/isMobileProvider";
 
@@ -28,10 +28,13 @@ export default function Sudoku({
   const theme = useTheme();
   const { isMobile } = useContext(isMobileContext);
   const { translate } = useLocales();
+  const largerBoxRef = useRef(null);
 
   // STATES
   // ------------------------------------------------------------------------------------------------
   const [isMouseDown, setIsMouseDown] = useState(false);
+  const [activeCell, setActiveCell] = useState({ row: "", col: "" });
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
 
   // VARIABLES
   // ------------------------------------------------------------------------------------------------
@@ -47,7 +50,28 @@ export default function Sudoku({
   const handleCellMouseEnter = (row, col) => {
     if (isMouseDown) {
       onCellSelect(row, col, true);
+      console.log(row, col);
     }
+  };
+
+  const handleBoardTouchMove = (event) => {
+    if (isTouchDevice && isMouseDown) {
+      const boundingRect = largerBoxRef.current.getBoundingClientRect();
+      const touchX = event.touches[0].clientX - boundingRect.left;
+      const touchY = event.touches[0].clientY - boundingRect.top;
+      const row = Math.floor(touchY / size) + 1;
+      const col = Math.floor(touchX / size) + 1;
+      if (row !== activeCell.row || col !== activeCell.col) {
+        // console.log(row + 1, col + 1);
+        setActiveCell({ row, col });
+        onCellSelect(`R${row}`, `C${col}`, true);
+      }
+    }
+  };
+
+  const handleCellTouchStart = (row, col) => {
+    setActiveCell({ row, col });
+    onCellSelect(row, col);
   };
 
   const checkInBox = (row, col) => {
@@ -77,6 +101,9 @@ export default function Sudoku({
 
   // EFFECTS
   // ------------------------------------------------------------------------------------------------
+  useEffect(() => {
+    setIsTouchDevice(isMobile);
+  }, [isMobile]);
 
   // COMPONENT
   // ------------------------------------------------------------------------------------------------
@@ -131,11 +158,16 @@ export default function Sudoku({
           textAlign: "center",
           userSelect: "none",
           display: isRunning || isSolved ? "" : "none",
+          touchAction: "none",
         }}
       >
         <Box
+          ref={largerBoxRef}
           onMouseDown={() => setIsMouseDown(true)}
           onMouseUp={() => setIsMouseDown(false)}
+          onTouchStart={() => setIsMouseDown(true)}
+          onTouchEnd={() => setIsMouseDown(false)}
+          onTouchMove={handleBoardTouchMove}
           sx={{
             border: "2px solid",
             borderColor: theme.palette.primary.darker,
@@ -201,11 +233,18 @@ export default function Sudoku({
                             ? level.board[row][col].color
                             : "transparent",
                       }}
-                      onClick={() => {
-                        handleCellClick(row, col);
-                      }}
                       onMouseEnter={() => {
                         handleCellMouseEnter(row, col);
+                      }}
+                      // onTouchStart={() => {
+                      //   handleCellTouchStart(row, col);
+                      //   handleCellClick(row, col);
+                      // }}
+                      // onTouchEnd={() => {
+                      //   handleCellTouchStart(row, col);
+                      // }}
+                      onClick={() => {
+                        handleCellClick(row, col);
                       }}
                     >
                       {!level.board[row][col].value && (

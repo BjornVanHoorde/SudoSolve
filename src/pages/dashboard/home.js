@@ -29,6 +29,7 @@ import { useContext, useEffect, useState } from "react";
 import { useLocales } from "src/locales";
 import { dataContext } from "src/firebase/dataProvider";
 import { fb_update_user } from "src/firebase/apis/users";
+import LoadingScreen from "src/components/loading-screen/LoadingScreen";
 
 // GLOBALS
 // ------------------------------------------------------------------------------------------------

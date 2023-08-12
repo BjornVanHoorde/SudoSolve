@@ -10,10 +10,12 @@ import {
   Container,
   Grid,
   MenuItem,
+  RadioGroup,
   Select,
   Stack,
   Switch,
   Typography,
+  alpha,
 } from "@mui/material";
 import DashboardLayout from "src/layouts/dashboard/DashboardLayout";
 import { useSettingsContext } from "src/components/settings";
@@ -26,6 +28,7 @@ import ColorPresetsOptions from "src/components/settings/drawer/ColorPresetsOpti
 import { useTheme } from "@emotion/react";
 import { useLocales } from "src/locales";
 import Iconify from "src/components/iconify/Iconify";
+import { MaskControl } from "src/components/settings/styles";
 
 // GLOBALS
 // ------------------------------------------------------------------------------------------------
@@ -43,6 +46,8 @@ export default function SettingsIndexScreen() {
   const { users } = useContext(dataContext);
   const theme = useTheme();
   const { onChangeLang, currentLang, allLangs, translate } = useLocales();
+  const { themeColorPresets, onChangeColorPresets, presetsOption } =
+    useSettingsContext();
 
   // STATES
   // ------------------------------------------------------------------------------------------------
@@ -93,7 +98,7 @@ export default function SettingsIndexScreen() {
         <title>{"SudoSolve | " + translate("settings")}</title>
       </Head>
 
-      <Container maxWidth={themeStretch ? false : "xl"} sx={{ mt: 1 }}>
+      <Container maxWidth={themeStretch ? false : "xl"} sx={{ mt: 1, mb: 5 }}>
         <CustomBreadcrumbs
           heading={translate("settings")}
           links={[]}
@@ -214,7 +219,64 @@ export default function SettingsIndexScreen() {
             <Grid item xs={12} md={4}>
               <Card sx={{ p: 3 }}>
                 <Typography variant="h6">{translate("themes")}</Typography>
-                <ColorPresetsOptions />
+                {/* <ColorPresetsOptions /> */}
+                <RadioGroup
+                  name="themeColorPresets"
+                  value={themeColorPresets}
+                  onChange={onChangeColorPresets}
+                >
+                  <Grid container spacing={2}>
+                    {presetsOption.map((color) => {
+                      const { name, value } = color;
+
+                      const selected = themeColorPresets === name;
+
+                      return (
+                        <Grid item xs={6} key={name}>
+                          <Card
+                            sx={{
+                              height: 75,
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+
+                              ...(selected && {
+                                bgcolor: alpha(value, 0.08),
+                                borderColor: alpha(value, 0.24),
+                              }),
+                            }}
+                          >
+                            <Card
+                              sx={{
+                                width: 25,
+                                height: 25,
+                                borderRadius: "50%",
+                                backgroundColor: value,
+                                transition: theme.transitions.create(
+                                  ["width", "height"],
+                                  {
+                                    easing: theme.transitions.easing.easeInOut,
+                                    duration:
+                                      theme.transitions.duration.shorter,
+                                  }
+                                ),
+                                ...(selected && {
+                                  width: 50,
+                                  height: 50,
+                                  boxShadow: `-2px 4px 8px 0px ${alpha(
+                                    value,
+                                    0.48
+                                  )}`,
+                                }),
+                              }}
+                            ></Card>
+                            <MaskControl value={name} />
+                          </Card>
+                        </Grid>
+                      );
+                    })}
+                  </Grid>
+                </RadioGroup>
               </Card>
             </Grid>
           </Grid>

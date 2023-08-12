@@ -9,6 +9,7 @@ import {
   Container,
   Dialog,
   Grid,
+  MenuItem,
   Select,
   Slide,
   Typography,
@@ -56,7 +57,9 @@ export default function PlayMySudokusScreen() {
   const [selectedSavedLevel, setSelectedSavedLevel] = useState(null);
   const [open, setOpen] = useState(false);
   const [sortedSudokus, setSortedSudokus] = useState([]);
-  const [difficulty, setDifficulty] = useState(null);
+  const [difficulty, setDifficulty] = useState({
+    name: "all",
+  });
 
   // VARIABLES
   // ------------------------------------------------------------------------------------------------
@@ -94,8 +97,15 @@ export default function PlayMySudokusScreen() {
       setSelectedLevel(null);
       return;
     }
-    setDifficulty(clickedDifficulty);
-    setSelectedLevel(null);
+
+    if (clickedDifficulty === undefined) {
+      setDifficulty({ name: "all" });
+      setSelectedLevel(null);
+      return;
+    } else {
+      setDifficulty(clickedDifficulty);
+      setSelectedLevel(null);
+    }
   };
 
   // EFFECTS
@@ -108,7 +118,7 @@ export default function PlayMySudokusScreen() {
     });
 
     // filter by difficulty
-    if (difficulty) {
+    if (difficulty.name !== "all") {
       newArray = newArray.filter(
         (sudoku) => sudoku.difficulty === difficulty.name.toLowerCase()
       );
@@ -147,7 +157,6 @@ export default function PlayMySudokusScreen() {
         {isMobile && (
           <Select
             fullWidth
-            native
             value={difficulty ? difficulty.name : ""}
             label={translate("difficulty")}
             onChange={(e) => {
@@ -156,18 +165,12 @@ export default function PlayMySudokusScreen() {
               );
               handleDifficultyClick(difficulty);
             }}
-            inputProps={{
-              name: "difficulty",
-              id: "outlined-age-native-simple",
-            }}
           >
-            <option aria-label="None" value="">
-              {translate("all")}
-            </option>
+            <MenuItem value="all">{translate("all")}</MenuItem>
             {difficulties.array.map((difficulty) => (
-              <option key={difficulty.name} value={difficulty.name}>
+              <MenuItem key={difficulty.name} value={difficulty.name}>
                 {translate(difficulty.name)}
-              </option>
+              </MenuItem>
             ))}
           </Select>
         )}

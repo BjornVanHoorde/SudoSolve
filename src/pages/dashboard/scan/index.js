@@ -31,6 +31,8 @@ import { isMobileContext } from "src/utils/isMobileProvider";
 import { fb_create_userSudoku } from "src/firebase/apis/userSudokus";
 import { getDifficulty } from "src/utils/getDifficulty";
 import { useLocales } from "src/locales";
+import { useRouter } from "next/router";
+import { PATH_DASHBOARD } from "src/routes/paths";
 
 // GLOBALS
 // ------------------------------------------------------------------------------------------------
@@ -46,6 +48,7 @@ export default function ScanIndexScreen() {
   const { enqueueSnackbar } = useSnackbar();
   const { isMobile } = useContext(isMobileContext);
   const { translate } = useLocales();
+  const { push } = useRouter();
 
   // STATES
   // ------------------------------------------------------------------------------------------------
@@ -131,7 +134,17 @@ export default function ScanIndexScreen() {
     }
   };
 
-  const handlePlay = () => {};
+  const handlePlay = () => {
+    const difficulty = getDifficulty(sudoku.board);
+    fb_create_userSudoku({
+      userId: user.userId,
+      board: sudoku.board,
+      type: "scanned",
+      difficulty,
+    }).then((id) => {
+      push(PATH_DASHBOARD.play.sudoku(id));
+    });
+  };
 
   const handleSave = () => {
     const difficulty = getDifficulty(sudoku.board);

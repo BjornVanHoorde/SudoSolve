@@ -98,6 +98,10 @@ export default function playSudokuScreen() {
 
   // FUNCTIONS
   // ------------------------------------------------------------------------------------------------
+  // useEffect(() => {
+  //   console.log(selectedCells);
+  // }, [selectedCells]);
+
   const handleCellSelect = (row, col, multiple) => {
     if (multiple) {
       if (selectedCells.some((cell) => cell.row === row && cell.col === col))
@@ -523,7 +527,7 @@ export default function playSudokuScreen() {
                   top: 20,
                   left: "50%",
                   transform: "translateX(-50%)",
-                  zIndex: 99999999999999,
+                  zIndex: 1111,
                 }}
               >
                 <Typography variant="h6">{`${
